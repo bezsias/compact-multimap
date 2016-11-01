@@ -1,7 +1,3 @@
-// Your profile name of the sonatype account. The default is the same with the organization value
-sonatypeProfileName := "bezsias"
-
-// To sync with Maven central, you need to supply the following information:
 pomExtra in Global := {
   <url>https://github.com/bezsias/compact-multimap</url>
   <licenses>

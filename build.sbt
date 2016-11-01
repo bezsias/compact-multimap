@@ -1,3 +1,5 @@
+organization := "com.github.bezsias"
+
 name := "compact-multimap"
 
 version := "0.1.0"
