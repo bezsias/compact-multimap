@@ -1,3 +1,5 @@
+sonatypeProfileName := "com.github.bezsias"
+
 pomExtra in Global := {
   <url>https://github.com/bezsias/compact-multimap</url>
   <licenses>
