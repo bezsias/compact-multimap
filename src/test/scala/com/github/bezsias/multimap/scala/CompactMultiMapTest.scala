@@ -1,7 +1,6 @@
 package com.github.bezsias.multimap.scala
 
 import org.scalatest._
-import collection.JavaConverters._
 
 class CompactMultiMapTest extends FunSpecLike with Matchers {
 
@@ -11,8 +10,8 @@ class CompactMultiMapTest extends FunSpecLike with Matchers {
     val value = "some value"
 
     def assertEmptyMap(map: MultiMap[String, String]): Unit = {
-      map.size() shouldBe 0
-      map.keys().asScala shouldBe Set()
+      map.size shouldBe 0
+      map.keys shouldBe Set()
       map.isEmpty shouldBe true
     }
 
@@ -47,11 +46,11 @@ class CompactMultiMapTest extends FunSpecLike with Matchers {
         val map = CompactMultiMap[String, String]()
         map.put(key, value)
 
-        map.size() shouldBe 1
-        map.keys.asScala shouldBe Set(key)
+        map.size shouldBe 1
+        map.keys shouldBe Set(key)
         map.contains(key) shouldBe true
         map.contains(key, value) shouldBe true
-        map.get(key).asScala shouldBe List(value)
+        map.get(key) shouldBe List(value)
       }
 
       it("should put a single item multiple times") {
@@ -60,11 +59,11 @@ class CompactMultiMapTest extends FunSpecLike with Matchers {
         map.put(key, value)
         map.put(key, value)
 
-        map.size() shouldBe 3
-        map.keys.asScala shouldBe Set(key)
+        map.size shouldBe 3
+        map.keys shouldBe Set(key)
         map.contains(key) shouldBe true
         map.contains(key, value) shouldBe true
-        map.get(key).asScala shouldBe List(value, value, value)
+        map.get(key) shouldBe List(value, value, value)
       }
 
       it("should put multiple distinct keyed items") {
@@ -76,11 +75,11 @@ class CompactMultiMapTest extends FunSpecLike with Matchers {
         val keyvalues = keys zip values
         keyvalues.foreach { case (k, v) => map.put(k, v) }
 
-        map.size() shouldBe n
-        map.keys().asScala shouldBe keys.toSet
+        map.size shouldBe n
+        map.keys shouldBe keys.toSet
         keys.forall(map.contains) shouldBe true
         keyvalues.forall { case (k, v) => map.contains(k, v) } shouldBe true
-        keyvalues.forall { case (k, v) => map.get(k).asScala == List(v) } shouldBe true
+        keyvalues.forall { case (k, v) => map.get(k) == List(v) } shouldBe true
 
       }
 
@@ -98,13 +97,13 @@ class CompactMultiMapTest extends FunSpecLike with Matchers {
         }
         val keys = keyvalues.map(_._1)
 
-        map.size() shouldBe (n * (n + 1)) /2
-        map.keys().size() shouldBe n
-        map.keys().asScala shouldBe keys.toSet
+        map.size shouldBe (n * (n + 1)) /2
+        map.keys.size shouldBe n
+        map.keys shouldBe keys.toSet
         keys.forall(map.contains) shouldBe true
 
         keyvalues.forall { case (k, vs) => vs.forall(map.contains(k, _)) } shouldBe true
-        keyvalues.forall { case (k, vs) => map.get(k).asScala == vs.toList } shouldBe true
+        keyvalues.forall { case (k, vs) => map.get(k) == vs.toList } shouldBe true
 
       }
     }

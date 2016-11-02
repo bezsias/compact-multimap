@@ -1,17 +1,9 @@
 package com.github.bezsias.multimap
 
-import com.github.bezsias.{multimap => jmultimap}
-//TODO: add decent scala wrapper
+import com.github.bezsias._
 
 package object scala {
 
-  type Ser = java.io.Serializable
-
-  type BytePackager[T <: Ser] = jmultimap.BytePackager[T]
-  def BytePackager[T <: Ser](blockSizeKb: Int = 64) = new jmultimap.BytePackager[T](blockSizeKb)
-
-  type MultiMap[K, V <: Ser] = jmultimap.MultiMap[K, V]
-
-  type CompactMultiMap[K, V <: Ser] = jmultimap.CompactMultiMap[K, V]
-  def CompactMultiMap[K, V <: Ser](blockSizeKb: Int = 64) = new jmultimap.CompactMultiMap[K, V](blockSizeKb)
+  type BytePackager[T <: java.io.Serializable] = multimap.BytePackager[T]
+  def BytePackager[T <: java.io.Serializable](blockSizeKb: Int = 64) = new multimap.BytePackager[T](blockSizeKb)
 }
