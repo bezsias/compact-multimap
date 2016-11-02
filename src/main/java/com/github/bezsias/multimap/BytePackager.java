@@ -6,9 +6,9 @@ import java.util.zip.*;
 
 public class BytePackager<T extends Serializable> {
 
-    public class OIS extends ObjectInputStream {
+    class OIS extends ObjectInputStream {
 
-        public OIS(InputStream in) throws IOException {
+        OIS(InputStream in) throws IOException {
             super(in);
         }
 
