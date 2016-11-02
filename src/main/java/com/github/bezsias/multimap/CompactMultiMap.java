@@ -14,7 +14,7 @@ public class CompactMultiMap<K, V extends Serializable> implements MultiMap<K, V
     private BytePackager<V> packager;
 
     public CompactMultiMap() throws java.io.IOException {
-        this(1);
+        this(8);
     }
 
     public CompactMultiMap(int blockSizeKb) throws java.io.IOException {

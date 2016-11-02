@@ -2,7 +2,7 @@ package com.github.bezsias.multimap.scala
 
 import com.github.bezsias._
 
-class CompactMultiMap[K, V <: java.io.Serializable] private (blockSizeKb: Int = 64) extends MultiMap[K, V] {
+class CompactMultiMap[K, V <: java.io.Serializable] private (blockSizeKb: Int = 8) extends MultiMap[K, V] {
   import collection.JavaConverters._
 
   private val map = new multimap.CompactMultiMap[K, V](blockSizeKb)
@@ -32,5 +32,5 @@ class CompactMultiMap[K, V <: java.io.Serializable] private (blockSizeKb: Int = 
 
 object CompactMultiMap {
 
-  def apply[K, V <: java.io.Serializable](blockSizeKb: Int = 64): CompactMultiMap[K, V] = new CompactMultiMap[K, V](blockSizeKb)
+  def apply[K, V <: java.io.Serializable](blockSizeKb: Int = 8): CompactMultiMap[K, V] = new CompactMultiMap[K, V](blockSizeKb)
 }
