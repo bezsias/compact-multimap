@@ -58,12 +58,15 @@ public class CompactMultiMap<K, V extends Serializable> implements MultiMap<K, V
         } catch (java.io.IOException e) {}
     }
 
-    //TODO: add support for better implementation in byte packager
     @Override
     public void putAll(K key, List<V> values) {
-        for (V value: values) {
-            put(key, value);
-        }
+        if (values.isEmpty()) return;
+        try {
+            byte[] bytes = map.getOrDefault(key, packager.init());
+            bytes = packager.pack(bytes, values);
+            map.put(key, bytes);
+            _size += values.size();
+        } catch (java.io.IOException e) {}
     }
 
     @Override

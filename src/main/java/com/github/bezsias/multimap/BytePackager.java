@@ -56,16 +56,8 @@ public class BytePackager<T extends Serializable> {
         return uncompressed;
     }
 
-    public byte[] pack(byte[] bytes, T key) throws IOException {
+    private byte[] pack(byte[] bytes, byte[] serialized) throws IOException {
         if (bytes.length < 2) throw new IllegalArgumentException("byte array is not initialized");
-
-        oos.writeObject(key);
-        oos.reset();
-        oos.flush();
-        byte[] serialized = baos.toByteArray();
-        oos.reset();
-        baos.reset();
-
         short rawLength = Util.readShort(bytes, 0);
         int length = rawLength + serialized.length;
         int compressedOffset = OFFSET_SPACE + rawLength;
@@ -85,8 +77,7 @@ public class BytePackager<T extends Serializable> {
                 System.arraycopy(bytes, OFFSET_SPACE, result, 0, rawLength);
                 System.arraycopy(serialized, 0, result, rawLength, serialized.length);
                 baos.write(OFFSET_BYTES);
-                byte[] compressed = zip(result);
-                return compressed;
+                return zip(result);
             }
         } else { // store as it is
             byte[] result = new byte[bytes.length + serialized.length];
@@ -102,7 +93,27 @@ public class BytePackager<T extends Serializable> {
             }
             return result;
         }
+    }
 
+    public byte[] pack(byte[] bytes, List<T> values) throws IOException {
+        if (values.isEmpty()) return bytes;
+        for (T value: values) {
+            oos.writeObject(value);
+        }
+        oos.reset();
+        oos.flush();
+        byte[] serialized = baos.toByteArray();
+        baos.reset();
+        return pack(bytes, serialized);
+    }
+
+    public byte[] pack(byte[] bytes, T value) throws IOException {
+        oos.writeObject(value);
+        oos.reset();
+        oos.flush();
+        byte[] serialized = baos.toByteArray();
+        baos.reset();
+        return pack(bytes, serialized);
     }
 
     private void read(InputStream is, ArrayList<T> list) throws IOException, ClassNotFoundException {
