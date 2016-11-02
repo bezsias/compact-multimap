@@ -1,4 +1,4 @@
-package smultimap
+package com.github.bezsias.multimap
 
 import org.scalatest._
 import collection.JavaConverters._
@@ -7,7 +7,7 @@ class BytePackagerTest extends FunSpecLike with Matchers {
 
   describe("BytePackager Tests") {
 
-    val packager = BytePackager[String](1)
+    val packager = new BytePackager[String](1)
 
     it("should init byte[] as expected") {
       val bytes = packager.init()

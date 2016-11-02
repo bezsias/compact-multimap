@@ -1,4 +1,4 @@
-package jmultimap;
+package com.github.bezsias.multimap;
 
 import java.util.*;
 

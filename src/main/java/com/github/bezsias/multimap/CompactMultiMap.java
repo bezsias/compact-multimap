@@ -1,4 +1,4 @@
-package jmultimap;
+package com.github.bezsias.multimap;
 
 import java.io.*;
 import java.util.*;
@@ -12,6 +12,10 @@ public class CompactMultiMap<K, V extends Serializable> implements MultiMap<K, V
     private Map<K, byte[]> map;
     private int _size = 0;
     private BytePackager<V> packager;
+
+    public CompactMultiMap() throws java.io.IOException {
+        this(1);
+    }
 
     public CompactMultiMap(int blockSizeKb) throws java.io.IOException {
         this.packager = new BytePackager<>(blockSizeKb);
