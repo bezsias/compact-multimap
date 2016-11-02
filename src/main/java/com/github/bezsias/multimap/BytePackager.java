@@ -71,7 +71,6 @@ public class BytePackager<T extends Serializable> {
         int compressedOffset = OFFSET_SPACE + rawLength;
         boolean hasCompressedData = compressedOffset < bytes.length;
         if (length >= blockSize) {
-
             if (hasCompressedData) {
                 byte[] uncompressedBytes = unzip(bytes, compressedOffset, bytes.length - compressedOffset);
                 byte[] result = new byte[uncompressedBytes.length + rawLength + serialized.length];
@@ -108,7 +107,7 @@ public class BytePackager<T extends Serializable> {
 
     private void read(InputStream is, ArrayList<T> list) throws IOException, ClassNotFoundException {
         try(OIS ois = new OIS(is)) {
-            while(true) {
+            while (true) {
                 T obj = (T) ois.readObject();
                 list.add(obj);
             }
