@@ -30,7 +30,7 @@ abstract class AbstractBytePackager<T extends Serializable> implements BytePacka
 
     byte[] pack(byte[] bytes, byte[] serialized) throws IOException {
         if (bytes.length < 2) throw new IllegalArgumentException("byte array is not initialized");
-        short rawLength = Util.readShort(bytes, 0);
+        int rawLength = Util.readShort(bytes, 0);
         int length = rawLength + serialized.length;
         int compressedOffset = OFFSET_SPACE + rawLength;
         boolean hasCompressedData = compressedOffset < bytes.length;
@@ -90,7 +90,7 @@ abstract class AbstractBytePackager<T extends Serializable> implements BytePacka
     }
 
     public ArrayList<T> unpack(byte[] bytes) throws IOException, ClassNotFoundException {
-        short rawLength = Util.readShort(bytes, 0);
+        int rawLength = Util.readShort(bytes, 0);
         int compressedOffset = OFFSET_SPACE + rawLength;
         boolean hasCompressedData = compressedOffset < bytes.length;
         ArrayList<T> list = new ArrayList<>();
