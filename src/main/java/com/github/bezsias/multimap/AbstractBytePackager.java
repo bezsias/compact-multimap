@@ -10,8 +10,6 @@ abstract class AbstractBytePackager<T extends Serializable> {
 
     public abstract byte[] pack(byte[] bytes, T value) throws IOException;
 
-    public abstract ArrayList<T> unpack(byte[] bytes) throws IOException, ClassNotFoundException;
-
     protected abstract void read(InputStream is, ArrayList<T> list) throws IOException, ClassNotFoundException;
 
     static int OFFSET_SPACE = 2; // first 2 byte is the size of uncompressed data
@@ -89,5 +87,17 @@ abstract class AbstractBytePackager<T extends Serializable> {
         byte[] uncompressed = baos.toByteArray();
         baos.reset();
         return uncompressed;
+    }
+
+    public ArrayList<T> unpack(byte[] bytes) throws IOException, ClassNotFoundException {
+        short rawLength = Util.readShort(bytes, 0);
+        int compressedOffset = OFFSET_SPACE + rawLength;
+        boolean hasCompressedData = compressedOffset < bytes.length;
+        ArrayList<T> list = new ArrayList<>();
+        if (hasCompressedData) {
+            read(new GZIPInputStream(new ByteArrayInputStream(bytes, compressedOffset, bytes.length - compressedOffset)), list);
+        }
+        read(new ByteArrayInputStream(bytes, OFFSET_SPACE, rawLength), list);
+        return list;
     }
 }

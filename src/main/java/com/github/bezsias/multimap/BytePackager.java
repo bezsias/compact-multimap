@@ -48,18 +48,7 @@ public class BytePackager<T extends Serializable> extends AbstractBytePackager<T
         return pack(bytes, serialized);
     }
 
-    @Override
-    public ArrayList<T> unpack(byte[] bytes) throws IOException, ClassNotFoundException {
-        short rawLength = Util.readShort(bytes, 0);
-        int compressedOffset = OFFSET_SPACE + rawLength;
-        boolean hasCompressedData = compressedOffset < bytes.length;
-        ArrayList<T> list = new ArrayList<>();
-        if (hasCompressedData) {
-            read(new GZIPInputStream(new ByteArrayInputStream(bytes, compressedOffset, bytes.length - compressedOffset)), list);
-        }
-        read(new ByteArrayInputStream(bytes, OFFSET_SPACE, rawLength), list);
-        return list;
-    }
+
 
     @Override
     protected void read(InputStream is, ArrayList<T> list) throws IOException, ClassNotFoundException {
