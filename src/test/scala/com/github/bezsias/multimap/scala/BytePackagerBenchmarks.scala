@@ -13,7 +13,7 @@ class BytePackagerBenchmarks extends FunSpecLike with Matchers {
       val items = 1.to(n).map(_ => generator).toList
       val packed = items.foldLeft(bytes)((bs, i) => packager.pack(bs, i))
 
-      val expectedLength = (expectedBytes * n) + 2
+      val expectedLength = expectedBytes * n
       val inflation = packed.length.toDouble / expectedLength
 
       val elapsed = System.currentTimeMillis() - time
@@ -26,10 +26,10 @@ class BytePackagerBenchmarks extends FunSpecLike with Matchers {
 
   def stringTests(blockSizeKb: Int, length: Int, n: Int = 1000): Unit = {
     val stringLengthOverhead = 4
+    val expectedLength = 3 * length + stringLengthOverhead
 
-    describe(s"string byte packager (${blockSizeKb}K buffer, $length bytes, $n items)") {
-      val expectedSize = Random.nextString(length).getBytes("UTF-8").length + stringLengthOverhead
-      new BytePackagerTester[String](ObjectBytePackager[String](blockSizeKb), Random.nextString(length), expectedSize, n)
+    describe(s"string byte packager (${blockSizeKb}K buffer, $n items)") {
+      new BytePackagerTester[String](ObjectBytePackager[String](blockSizeKb), Random.nextString(length), expectedLength, n)
     }
   }
 
@@ -60,5 +60,6 @@ class BytePackagerBenchmarks extends FunSpecLike with Matchers {
   stringTests(64, 100, 1000)
   stringTests(64, 100, 5000)
   stringTests(64, 100, 10000)
+  stringTests(64, 100, 20000)
 
 }
