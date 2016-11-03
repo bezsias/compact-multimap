@@ -4,7 +4,7 @@ import java.io.*;
 import java.util.*;
 import java.util.zip.*;
 
-abstract class AbstractBytePackager<T extends Serializable> {
+abstract class AbstractBytePackager<T extends Serializable> implements BytePackager<T> {
 
     public abstract byte[] pack(byte[] bytes, List<T> values) throws IOException;
 

@@ -11,14 +11,18 @@ public class CompactMultiMap<K, V extends Serializable> implements MultiMap<K, V
 
     private Map<K, byte[]> map;
     private int _size = 0;
-    private ObjectBytePackager<V> packager;
+    private BytePackager<V> packager;
 
-    public CompactMultiMap() throws java.io.IOException {
-        this(8);
+    public static <K> MultiMap<K, Integer> intMultiMap(int blockSizeKb) throws IOException {
+        return new CompactMultiMap<>(new IntBytePackager(blockSizeKb));
     }
 
-    public CompactMultiMap(int blockSizeKb) throws java.io.IOException {
-        this.packager = new ObjectBytePackager<>(blockSizeKb);
+    public static <K, V extends Serializable> MultiMap<K, V> objMultiMap(int blockSizeKb) throws IOException {
+        return new CompactMultiMap<>(new ObjectBytePackager<>(blockSizeKb));
+    }
+
+    private CompactMultiMap(BytePackager<V> packager) throws IOException {
+        this.packager = packager;
         this.map = new HashMap<>();
     }
 
@@ -55,7 +59,7 @@ public class CompactMultiMap<K, V extends Serializable> implements MultiMap<K, V
             bytes = packager.pack(bytes, value);
             map.put(key, bytes);
             _size++;
-        } catch (java.io.IOException e) {}
+        } catch (IOException e) {}
     }
 
     @Override
@@ -66,7 +70,7 @@ public class CompactMultiMap<K, V extends Serializable> implements MultiMap<K, V
             bytes = packager.pack(bytes, values);
             map.put(key, bytes);
             _size += values.size();
-        } catch (java.io.IOException e) {}
+        } catch (IOException e) {}
     }
 
     @Override
