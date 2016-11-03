@@ -34,23 +34,21 @@ abstract class AbstractBytePackager<T extends Serializable> implements BytePacka
         int length = rawLength + serialized.length;
         int compressedOffset = OFFSET_SPACE + rawLength;
         boolean hasCompressedData = compressedOffset < bytes.length;
-        if (length >= blockSize) {
-            if (hasCompressedData) {
-                byte[] uncompressedBytes = unzip(bytes, compressedOffset, bytes.length - compressedOffset);
-                byte[] result = new byte[uncompressedBytes.length + rawLength + serialized.length];
-                System.arraycopy(uncompressedBytes, 0, result, 0, uncompressedBytes.length);
-                System.arraycopy(bytes, OFFSET_SPACE, result, uncompressedBytes.length, rawLength);
-                System.arraycopy(serialized, 0, result, uncompressedBytes.length + rawLength, serialized.length);
-                baos.write(OFFSET_BYTES);
-                return zip(result);
-            } else {
+        if (length >= blockSize) { // create a new compressed block
+            GZIPOutputStream gzos = new GZIPOutputStream(baos, true);
+            gzos.write(bytes, OFFSET_SPACE, rawLength);
+            gzos.write(serialized);
+            gzos.close();
+            byte[] compressed = baos.toByteArray();
+            baos.reset();
+            baos.write(OFFSET_BYTES);
+            baos.write(bytes, compressedOffset, bytes.length - compressedOffset);
+            baos.write(Util.asBytes(compressed.length));
+            baos.write(compressed);
+            byte[] result = baos.toByteArray();
+            baos.reset();
+            return result;
 
-                byte[] result = new byte[rawLength + serialized.length];
-                System.arraycopy(bytes, OFFSET_SPACE, result, 0, rawLength);
-                System.arraycopy(serialized, 0, result, rawLength, serialized.length);
-                baos.write(OFFSET_BYTES);
-                return zip(result);
-            }
         } else { // store as it is
             byte[] result = new byte[bytes.length + serialized.length];
 
@@ -67,35 +65,40 @@ abstract class AbstractBytePackager<T extends Serializable> implements BytePacka
         }
     }
 
-    private byte[] zip(byte[] bytes) throws IOException {
-        GZIPOutputStream gzos = new GZIPOutputStream(baos, true);
-        gzos.write(bytes, 0, bytes.length);
-        gzos.finish();
-        gzos.flush();
-        gzos.close();
-        byte[] compressed = baos.toByteArray();
-        baos.reset();
-        return compressed;
-
-    }
-
-    private byte[] unzip(byte[] bytes, int offset, int length) throws IOException {
-        GZIPInputStream gzis = new GZIPInputStream(new ByteArrayInputStream(bytes, offset, length));
-        Util.copy(gzis, baos);
-        gzis.close();
-        baos.flush();
-        byte[] uncompressed = baos.toByteArray();
-        baos.reset();
-        return uncompressed;
-    }
+//    private byte[] zip(byte[] bytes) throws IOException {
+//        return zip(bytes, 0, bytes.length);
+//    }
+//
+//    private byte[] zip(byte[] bytes, int offset, int length) throws IOException {
+//        GZIPOutputStream gzos = new GZIPOutputStream(baos, true);
+//        gzos.write(bytes, offset, length);
+//        gzos.finish();
+//        gzos.flush();
+//        gzos.close();
+//        byte[] compressed = baos.toByteArray();
+//        baos.reset();
+//        return compressed;
+//
+//    }
+//
+//    private byte[] unzip(byte[] bytes, int offset, int length) throws IOException {
+//        GZIPInputStream gzis = new GZIPInputStream(new ByteArrayInputStream(bytes, offset, length));
+//        Util.copy(gzis, baos);
+//        gzis.close();
+//        baos.flush();
+//        byte[] uncompressed = baos.toByteArray();
+//        baos.reset();
+//        return uncompressed;
+//    }
 
     public ArrayList<T> unpack(byte[] bytes) throws IOException, ClassNotFoundException {
         int rawLength = Util.readShort(bytes, 0);
-        int compressedOffset = OFFSET_SPACE + rawLength;
-        boolean hasCompressedData = compressedOffset < bytes.length;
         ArrayList<T> list = new ArrayList<>();
-        if (hasCompressedData) {
-            read(new GZIPInputStream(new ByteArrayInputStream(bytes, compressedOffset, bytes.length - compressedOffset)), list);
+        int offset = OFFSET_SPACE + rawLength;
+        while (offset < bytes.length) { // read all compressed blocks
+            int blockLength = Util.readShort(bytes, offset);
+            read(new GZIPInputStream(new ByteArrayInputStream(bytes, offset + OFFSET_SPACE, blockLength)), list);
+            offset += blockLength + OFFSET_SPACE;
         }
         read(new ByteArrayInputStream(bytes, OFFSET_SPACE, rawLength), list);
         return list;

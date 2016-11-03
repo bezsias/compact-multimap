@@ -1,11 +1,20 @@
 package com.github.bezsias.multimap.scala
 
+import java.math.BigInteger
+import java.security.SecureRandom
+
 import org.scalatest._
 
 import scala.collection.JavaConverters._
 import scala.util.Random
 
 class BytePackagerTests extends FunSpecLike with Matchers {
+
+  private val random = new SecureRandom()
+
+  private def randomString(length: Int): String = {
+    new BigInteger(1024, random).toString(32).take(length)
+  }
 
   class BytePackagerTester[T](packager: com.github.bezsias.multimap.BytePackager[T], generator: => T) {
 
@@ -63,7 +72,7 @@ class BytePackagerTests extends FunSpecLike with Matchers {
   }
 
   describe("ObjectBytePackager Tests") {
-    new BytePackagerTester[String](ObjectBytePackager[String](1), Random.nextString(5))
+    new BytePackagerTester[String](ObjectBytePackager[String](1), randomString(5))
   }
 
   describe("IntBytePackager Tests") {

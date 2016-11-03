@@ -57,6 +57,8 @@ class BytePackagerBenchmarks extends FunSpecLike with Matchers {
 
   stringTests(32, 100)
 
-  stringTests(64, 100)
+  stringTests(64, 100, 1000)
+  stringTests(64, 100, 5000)
+  stringTests(64, 100, 10000)
 
 }

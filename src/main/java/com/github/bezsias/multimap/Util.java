@@ -22,4 +22,11 @@ class Util {
     static int readShort(byte[] array, int pos) {
         return ((array[pos] & 0xFF) << 8 | (array[pos+1] & 0xFF));
     }
+
+    static byte[] asBytes(int value) {
+        byte[] bytes = new byte[2];
+        writeShort(value, bytes, 0);
+        return bytes;
+    }
+
 }
