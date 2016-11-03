@@ -2,9 +2,8 @@ package com.github.bezsias.multimap;
 
 import java.io.*;
 import java.util.*;
-import java.util.zip.*;
 
-public class BytePackager<T extends Serializable> extends AbstractBytePackager<T> {
+public class ObjectBytePackager<T extends Serializable> extends AbstractBytePackager<T> {
 
     private class OIS extends ObjectInputStream {
 
@@ -19,7 +18,7 @@ public class BytePackager<T extends Serializable> extends AbstractBytePackager<T
 
     private ObjectOutputStream oos;
 
-    public BytePackager(int blockSizeKb) throws IOException {
+    public ObjectBytePackager(int blockSizeKb) throws IOException {
         super(blockSizeKb);
         this.oos = new ObjectOutputStream(baos);
         baos.reset(); // clear header
@@ -47,8 +46,6 @@ public class BytePackager<T extends Serializable> extends AbstractBytePackager<T
         baos.reset();
         return pack(bytes, serialized);
     }
-
-
 
     @Override
     protected void read(InputStream is, ArrayList<T> list) throws IOException, ClassNotFoundException {

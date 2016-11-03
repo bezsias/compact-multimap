@@ -3,11 +3,11 @@ package com.github.bezsias.multimap.scala
 import org.scalatest._
 import collection.JavaConverters._
 
-class BytePackagerTest extends FunSpecLike with Matchers {
+class ObjectBytePackagerTest extends FunSpecLike with Matchers {
 
-  describe("BytePackager Tests") {
+  describe("ObjectBytePackager Tests") {
 
-    val packager = BytePackager[String](1)
+    val packager = ObjectBytePackager[String](1)
 
     it("should init byte[] as expected") {
       val bytes = packager.init()

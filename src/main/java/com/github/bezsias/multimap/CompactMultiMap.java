@@ -11,14 +11,14 @@ public class CompactMultiMap<K, V extends Serializable> implements MultiMap<K, V
 
     private Map<K, byte[]> map;
     private int _size = 0;
-    private BytePackager<V> packager;
+    private ObjectBytePackager<V> packager;
 
     public CompactMultiMap() throws java.io.IOException {
         this(8);
     }
 
     public CompactMultiMap(int blockSizeKb) throws java.io.IOException {
-        this.packager = new BytePackager<>(blockSizeKb);
+        this.packager = new ObjectBytePackager<>(blockSizeKb);
         this.map = new HashMap<>();
     }
 
