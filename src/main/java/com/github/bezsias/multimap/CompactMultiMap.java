@@ -26,6 +26,14 @@ public class CompactMultiMap<K, V extends Serializable> implements MultiMap<K, V
         this.map = new HashMap<>();
     }
 
+    public int memoryUsage() {
+        int len = 0;
+        for (K key: keys()) {
+            len += map.get(key).length;
+        }
+        return len;
+    }
+
     @Override
     public int size() {
         return _size;

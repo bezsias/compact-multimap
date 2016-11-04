@@ -9,6 +9,8 @@ class CompactMultiMap[K, V <: java.io.Serializable] private (blockSizeKb: Int = 
 
   override def size: Int = map.size
 
+  override def memoryUsage(): Int = map.memoryUsage()
+
   override def isEmpty: Boolean = map.isEmpty
 
   override def contains(key: K): Boolean = map.contains(key)
