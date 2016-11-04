@@ -20,7 +20,7 @@ abstract class AbstractSimpleBytePackager<T extends Serializable> implements Sim
     }
 
 
-    public BytePack append(BytePack pack, byte[] bytes) throws IOException {
+    BytePack append(BytePack pack, byte[] bytes) throws IOException {
         if (bytes.length >= blockSize) { // create a new compressed block
             baos.reset();
 
@@ -43,18 +43,19 @@ abstract class AbstractSimpleBytePackager<T extends Serializable> implements Sim
 
     public ArrayList<T> unpack(BytePack pack) throws IOException, ClassNotFoundException {
         ArrayList<T> list = new ArrayList<>();
-        if (blockCompressed) {
-            int offset = 0;
-            while (offset < pack.compressed.length) { // read all compressed blocks
-                int blockLength = Util.readShort(pack.compressed, offset);
-                read(new GZIPInputStream(new ByteArrayInputStream(pack.compressed, offset + LENGTH_SPACE, blockLength)), list);
-                offset += blockLength + LENGTH_SPACE;
+        if (pack.isCompressed()) {
+            if (blockCompressed) {
+                int offset = 0;
+                while (offset < pack.compressed.length) { // read all compressed blocks
+                    int blockLength = Util.readShort(pack.compressed, offset);
+                    read(new GZIPInputStream(new ByteArrayInputStream(pack.compressed, offset + LENGTH_SPACE, blockLength)), list);
+                    offset += blockLength + LENGTH_SPACE;
+                }
+            } else {
+                read(new GZIPInputStream(new ByteArrayInputStream(pack.compressed)), list);
             }
-            read(new ByteArrayInputStream(pack.noncompressed), list);
-        } else {
-            read(new GZIPInputStream(new ByteArrayInputStream(pack.compressed)), list);
-            read(new ByteArrayInputStream(pack.noncompressed), list);
         }
+        read(new ByteArrayInputStream(pack.noncompressed), list);
         return list;
     }
 }

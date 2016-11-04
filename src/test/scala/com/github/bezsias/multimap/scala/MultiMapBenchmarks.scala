@@ -2,8 +2,6 @@ package com.github.bezsias.multimap.scala
 
 import org.scalatest.{FunSpecLike, Matchers}
 
-import scala.util.Random
-
 class MultiMapBenchmarks extends FunSpecLike with Matchers {
 
   class MultiMapTester (
@@ -47,29 +45,16 @@ class MultiMapBenchmarks extends FunSpecLike with Matchers {
     }
   }
 
-//  test(1, 10, 1, 100)
-//  test(1, 10, 10, 100)
+  test(1, 100, 1, 100)
+  test(1, 100, 1, 1000)
+  test(1, 100, 1, 5000)
+  test(1, 100, 1, 10000)
+  test(1, 100, 1, 15000)
 
-  test(1, 100, 100, 100)
-  test(1, 100, 100, 1000)
-//  test(1, 100, 10, 5000)
-//  test(1, 100, 10, 10000)
-//  test(1, 100, 10, 15000)
-//
-//
-//  test(1, 100, 1, 100)
-//  test(1, 100, 1, 1000)
-//  test(1, 100, 1, 5000)
-//  test(1, 100, 1, 10000)
-//  test(1, 100, 1, 15000)
-//
-//  test(64, 100, 1, 100)
-//  test(64, 100, 1, 1000)
-//  test(64, 100, 1, 5000)
-//  test(64, 100, 1, 10000)
-//  test(64, 100, 1, 15000)
-
-//  test(1, 1000, 1, 100)
-//  test(1, 1000, 1, 1000)
+  test(64, 100, 1, 100)
+  test(64, 100, 1, 1000)
+  test(64, 100, 1, 5000)
+  test(64, 100, 1, 10000)
+  test(64, 100, 1, 15000)
 
 }

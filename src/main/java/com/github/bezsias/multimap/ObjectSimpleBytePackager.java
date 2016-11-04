@@ -26,7 +26,7 @@ public class ObjectSimpleBytePackager<T extends Serializable> extends AbstractSi
 
     public BytePack pack(BytePack pack, T value) throws IOException {
         baos.reset();
-        oos.write(pack.noncompressed);
+        baos.write(pack.noncompressed);
         oos.writeObject(value);
         oos.flush();
         oos.reset();
@@ -35,7 +35,7 @@ public class ObjectSimpleBytePackager<T extends Serializable> extends AbstractSi
 
     public BytePack pack(BytePack pack, List<T> values) throws IOException {
         baos.reset();
-        oos.write(pack.noncompressed);
+        baos.write(pack.noncompressed);
         for (int i = 0, n = values.size(); i < n; i++) {
             oos.writeObject(values.get(i));
         }
@@ -53,6 +53,5 @@ public class ObjectSimpleBytePackager<T extends Serializable> extends AbstractSi
             }
         } catch (EOFException e) {}
     }
-
 
 }

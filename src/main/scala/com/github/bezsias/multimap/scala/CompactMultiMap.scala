@@ -5,7 +5,8 @@ import com.github.bezsias._
 class CompactMultiMap[K, V <: java.io.Serializable] private (blockSizeKb: Int = 8) extends MultiMap[K, V] {
   import collection.JavaConverters._
 
-  private val map = multimap.CompactMultiMap.objMultiMap[K, V](blockSizeKb)
+//  private val map = multimap.CompactMultiMap.objMultiMap[K, V](blockSizeKb)
+  private val map = multimap.SimpleCompactMultiMap.objMultiMap[K, V](blockSizeKb)
 
   override def size: Int = map.size
 

@@ -5,13 +5,18 @@ class BytePack {
     byte[] noncompressed;
     byte[] compressed;
 
-    public BytePack() {
+    BytePack() {
         this.noncompressed = EMPTY_BYTE_ARRAY;
         this.compressed = null;
     }
 
+    BytePack(byte[] bytes) {
+        this.noncompressed = bytes;
+        this.compressed = null;
+    }
+
     boolean isCompressed() {
-        return compressed == null;
+        return compressed != null;
     }
 
     void appendCompressed(byte[] bytes) {
@@ -23,5 +28,13 @@ class BytePack {
             System.arraycopy(bytes, 0, result, compressed.length, bytes.length);
             compressed = result;
         }
+        noncompressed = EMPTY_BYTE_ARRAY;
+    }
+
+    int size() {
+        if (compressed == null )
+            return noncompressed.length;
+        else
+            return noncompressed.length + compressed.length;
     }
 }
