@@ -104,14 +104,10 @@ public class SimpleCompactMultiMap<K, V extends Serializable> implements MultiMa
     @Override
     public List<V> get(K key) {
         BytePack pack = fetch(key);
-        if (pack == null){
+        try {
+            return packager.unpack(pack);
+        } catch (IOException | ClassNotFoundException e) {
             return Collections.emptyList();
-        } else {
-            try {
-                return packager.unpack(pack);
-            } catch (IOException | ClassNotFoundException e) {
-                return Collections.emptyList();
-            }
         }
     }
 
