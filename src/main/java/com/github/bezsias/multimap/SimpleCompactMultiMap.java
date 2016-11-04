@@ -10,8 +10,8 @@ import java.io.Serializable;
  */
 public class SimpleCompactMultiMap<K, V extends Serializable> implements MultiMap<K, V> {
 
-    private Map<K, BytePack> packs;
-    private Map<K, byte[]> map;
+    private Map<K, byte[]> compressedMap;
+    private Map<K, byte[]> noncompressedMap;
     private int _size = 0;
     private SimpleBytePackager<V> packager;
 
@@ -21,15 +21,14 @@ public class SimpleCompactMultiMap<K, V extends Serializable> implements MultiMa
 
     private SimpleCompactMultiMap(SimpleBytePackager<V> packager) throws IOException {
         this.packager = packager;
-        this.map = new HashMap<>();
-        this.packs = new HashMap<>();
+        this.noncompressedMap = new HashMap<>();
+        this.compressedMap = new HashMap<>();
     }
 
     public int memoryUsage() {
         int len = 0;
         for (K key: keys()) {
-            BytePack pack = fetch(key);
-            if (pack != null) len += pack.size();
+            len += fetch(key).size();
         }
         return len;
     }
@@ -46,7 +45,7 @@ public class SimpleCompactMultiMap<K, V extends Serializable> implements MultiMa
 
     @Override
     public boolean contains(K key) {
-        return map.containsKey(key) || packs.containsKey(key);
+        return noncompressedMap.containsKey(key) || compressedMap.containsKey(key);
     }
 
     @Override
@@ -58,37 +57,33 @@ public class SimpleCompactMultiMap<K, V extends Serializable> implements MultiMa
     @Override
     public Set<K> keys() {
         Set<K> ks = new HashSet<>();
-        ks.addAll(map.keySet());
-        ks.addAll(packs.keySet());
+        ks.addAll(noncompressedMap.keySet());
+        ks.addAll(compressedMap.keySet());
         return ks;
     }
 
     private BytePack fetch(K key) {
-        byte[] bytes = map.get(key);
-        if (bytes == null) return packs.get(key);
-        else return new BytePack(bytes);
-    }
-
-    private BytePack fetchOrDefault(K key) {
-        BytePack pack = fetch(key);
-        if (pack == null) return new BytePack();
-        else return pack;
+        return new BytePack(noncompressedMap.get(key), compressedMap.get(key));
     }
 
     private void store(K key, BytePack pack) {
-        if (pack.isCompressed()) {
-            map.remove(key);
-            packs.put(key, pack);
+        if (pack.noncompressed != null) {
+            noncompressedMap.put(key, pack.noncompressed);
         } else {
-            packs.remove(key);
-            map.put(key, pack.noncompressed);
+            noncompressedMap.remove(key);
+        }
+
+        if (pack.compressed != null) {
+            compressedMap.put(key, pack.compressed);
+        } else {
+            compressedMap.remove(key);
         }
     }
 
     @Override
     public void put(K key, V value) {
         try {
-            BytePack pack = fetchOrDefault(key);
+            BytePack pack = fetch(key);
             pack = packager.pack(pack, value);
             store(key, pack);
             _size++;
@@ -99,7 +94,7 @@ public class SimpleCompactMultiMap<K, V extends Serializable> implements MultiMa
     public void putAll(K key, List<V> values) {
         if (values.isEmpty()) return;
         try {
-            BytePack pack = fetchOrDefault(key);
+            BytePack pack = fetch(key);
             pack = packager.pack(pack, values);
             store(key, pack);
             _size += values.size();
@@ -123,8 +118,8 @@ public class SimpleCompactMultiMap<K, V extends Serializable> implements MultiMa
     @Override
     public void remove(K key) {
         _size -= get(key).size(); //FIXME: too expensive?
-        map.remove(key);
-        packs.remove(key);
+        noncompressedMap.remove(key);
+        compressedMap.remove(key);
     }
 
     @Override
@@ -137,8 +132,8 @@ public class SimpleCompactMultiMap<K, V extends Serializable> implements MultiMa
 
     @Override
     public void clear() {
-        map.clear();
-        packs.clear();
+        noncompressedMap.clear();
+        compressedMap.clear();
         _size = 0;
     }
 }

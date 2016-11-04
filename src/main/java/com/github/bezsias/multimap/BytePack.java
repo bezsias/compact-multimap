@@ -15,6 +15,14 @@ class BytePack {
         this.compressed = null;
     }
 
+    BytePack(byte[] noncompressedBytes, byte[] compressedBytes) {
+        if (noncompressedBytes == null)
+            this.noncompressed = EMPTY_BYTE_ARRAY;
+        else
+            this.noncompressed = noncompressedBytes;
+        this.compressed = compressedBytes;
+    }
+
     boolean isCompressed() {
         return compressed != null;
     }
