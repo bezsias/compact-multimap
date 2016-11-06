@@ -18,6 +18,8 @@ public class SimpleIntBytePackager extends SimplePrimitiveBytePackager<Integer> 
 
     @Override
     public BytePack pack(BytePack pack, List<Integer> values) throws IOException {
+        baos.reset();
+        baos.write(pack.noncompressed);
         if (values.isEmpty()) return pack;
         for (int i = 0, n = values.size(); i < n; i++) {
             dos.writeInt(values.get(i));
@@ -27,6 +29,8 @@ public class SimpleIntBytePackager extends SimplePrimitiveBytePackager<Integer> 
 
     @Override
     public BytePack pack(BytePack pack, Integer value) throws IOException {
+        baos.reset();
+        baos.write(pack.noncompressed);
         dos.writeInt(value);
         return flushStream(pack);
     }

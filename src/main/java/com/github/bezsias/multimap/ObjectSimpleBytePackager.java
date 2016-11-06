@@ -18,7 +18,7 @@ public class ObjectSimpleBytePackager<T extends Serializable> extends AbstractSi
 
     private ObjectOutputStream oos;
 
-    ObjectSimpleBytePackager(int blockSizeKb) throws IOException {
+    public ObjectSimpleBytePackager(int blockSizeKb) throws IOException {
         super(blockSizeKb);
         this.oos = new ObjectOutputStream(baos);
         baos.reset(); // clear header

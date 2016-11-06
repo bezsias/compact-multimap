@@ -1,11 +1,11 @@
 package com.github.bezsias.multimap;
 
-class BytePack {
+public class BytePack {
     private static byte[] EMPTY_BYTE_ARRAY = new byte[0];
     byte[] noncompressed;
     byte[] compressed;
 
-    BytePack() {
+    public BytePack() {
         this.noncompressed = EMPTY_BYTE_ARRAY;
         this.compressed = null;
     }
@@ -39,7 +39,7 @@ class BytePack {
         noncompressed = EMPTY_BYTE_ARRAY;
     }
 
-    int size() {
+    public int size() {
         if (compressed == null )
             return noncompressed.length;
         else

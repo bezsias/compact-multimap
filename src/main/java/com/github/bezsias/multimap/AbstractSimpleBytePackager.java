@@ -27,6 +27,7 @@ abstract class AbstractSimpleBytePackager<T extends Serializable> implements Sim
             gzos.close();
 
             byte[] compressed = baos.toByteArray();
+            Util.writeShort(compressed.length - LENGTH_SPACE, compressed, 0);
             pack.appendCompressed(compressed);
         } else {
             pack.noncompressed = bytes;

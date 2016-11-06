@@ -1,24 +1,27 @@
 package com.github.bezsias.multimap.scala
 
+import com.github.bezsias.multimap.{BytePack, ObjectSimpleBytePackager}
 import org.scalatest.{FunSpecLike, Matchers}
+
 import scala.util.Random
 
 class BytePackagerBenchmarks extends FunSpecLike with Matchers {
 
-  class BytePackagerTester[T](packager: com.github.bezsias.multimap.BytePackager[T], generator: => T, expectedBytes: Int, n: Int) {
+  class BytePackagerTester[T](packager: com.github.bezsias.multimap.SimpleBytePackager[T], generator: => T, expectedBytes: Int, n: Int) {
 
     def test(n: Int): String = {
       val time = System.currentTimeMillis()
-      val bytes = packager.init()
+      val bytes = new BytePack()
       val items = 1.to(n).map(_ => generator).toList
       val packed = items.foldLeft(bytes)((bs, i) => packager.pack(bs, i))
 
       val expectedLength = expectedBytes * n
-      val inflation = packed.length.toDouble / expectedLength
+      val packedSize = packed.size
+      val inflation = packedSize / expectedLength.toDouble
 
       val elapsed = System.currentTimeMillis() - time
 
-      s"raw: $expectedLength, packed: ${packed.length} bytes, inflation: ${"%02.2f".format(inflation * 100)}%, $elapsed ms"
+      s"raw: $expectedLength, packed: $packedSize bytes, inflation: ${"%02.2f".format(inflation * 100)}%, $elapsed ms"
     }
 
     it(s"${test(n)}") {}
