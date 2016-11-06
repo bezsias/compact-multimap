@@ -3,9 +3,9 @@ package com.github.bezsias.multimap;
 import java.io.*;
 import java.util.*;
 
-public class SimpleIntBytePackager extends SimplePrimitiveBytePackager<Integer> {
+public class IntBytePackager extends PrimitiveBytePackager<Integer> {
 
-    public SimpleIntBytePackager(int blockSizeKb) throws IOException {
+    public IntBytePackager(int blockSizeKb) throws IOException {
         super(blockSizeKb);
     }
 

@@ -3,7 +3,7 @@ package com.github.bezsias.multimap;
 import java.io.*;
 import java.util.*;
 
-public interface SimpleBytePackager<T> {
+public interface BytePackager<T> {
 
     BytePack pack(BytePack pack, List<T> values) throws IOException;
 

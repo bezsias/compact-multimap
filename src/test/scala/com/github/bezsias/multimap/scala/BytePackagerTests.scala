@@ -1,6 +1,6 @@
 package com.github.bezsias.multimap.scala
 
-import com.github.bezsias.multimap.{BytePack, SimpleBytePackager}
+import com.github.bezsias.multimap.{BytePack, BytePackager}
 import org.scalatest._
 
 import scala.collection.JavaConverters._
@@ -8,7 +8,7 @@ import scala.util.Random
 
 class BytePackagerTests extends FunSpecLike with Matchers {
 
-  class BytePackagerTester[T](packager: SimpleBytePackager[T], generator: => T) {
+  class BytePackagerTester[T](packager: BytePackager[T], generator: => T) {
 
     def testPackSingle(n: Int): Unit = {
       val bytes = new BytePack()

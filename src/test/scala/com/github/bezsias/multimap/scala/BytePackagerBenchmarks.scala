@@ -1,13 +1,13 @@
 package com.github.bezsias.multimap.scala
 
-import com.github.bezsias.multimap.{BytePack, ObjectSimpleBytePackager}
+import com.github.bezsias.multimap.{BytePack, BytePackager}
 import org.scalatest.{FunSpecLike, Matchers}
 
 import scala.util.Random
 
 class BytePackagerBenchmarks extends FunSpecLike with Matchers {
 
-  class BytePackagerTester[T](packager: com.github.bezsias.multimap.SimpleBytePackager[T], generator: => T, expectedBytes: Int, n: Int) {
+  class BytePackagerTester[T](packager: BytePackager[T], generator: => T, expectedBytes: Int, n: Int) {
 
     def test(n: Int): String = {
       val time = System.currentTimeMillis()

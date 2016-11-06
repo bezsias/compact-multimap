@@ -3,7 +3,7 @@ package com.github.bezsias.multimap;
 import java.io.*;
 import java.util.*;
 
-public class ObjectSimpleBytePackager<T extends Serializable> extends AbstractSimpleBytePackager<T> {
+public class ObjectBytePackager<T extends Serializable> extends AbstractBytePackager<T> {
 
     private class OIS extends ObjectInputStream {
 
@@ -18,7 +18,7 @@ public class ObjectSimpleBytePackager<T extends Serializable> extends AbstractSi
 
     private ObjectOutputStream oos;
 
-    public ObjectSimpleBytePackager(int blockSizeKb) throws IOException {
+    public ObjectBytePackager(int blockSizeKb) throws IOException {
         super(blockSizeKb);
         this.oos = new ObjectOutputStream(baos);
         baos.reset(); // clear header

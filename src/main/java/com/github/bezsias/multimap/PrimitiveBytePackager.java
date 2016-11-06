@@ -2,10 +2,10 @@ package com.github.bezsias.multimap;
 
 import java.io.*;
 
-abstract class SimplePrimitiveBytePackager<T extends Serializable> extends AbstractSimpleBytePackager<T> {
+abstract class PrimitiveBytePackager<T extends Serializable> extends AbstractBytePackager<T> {
     DataOutputStream dos;
 
-    SimplePrimitiveBytePackager(int blockSizeKb) throws IOException {
+    PrimitiveBytePackager(int blockSizeKb) throws IOException {
         super(blockSizeKb);
         dos = new DataOutputStream(baos);
     }

@@ -8,18 +8,18 @@ import java.io.Serializable;
  * Compact zipped byte[] based value serialization.
  * Works best for append only situation.
  */
-public class SimpleCompactMultiMap<K, V extends Serializable> implements MultiMap<K, V> {
+public class CompactMultiMap<K, V extends Serializable> implements MultiMap<K, V> {
 
     private Map<K, byte[]> compressedMap;
     private Map<K, byte[]> noncompressedMap;
     private int _size = 0;
-    private SimpleBytePackager<V> packager;
+    private BytePackager<V> packager;
 
     public static <K, V extends Serializable> MultiMap<K, V> objMultiMap(int blockSizeKb) throws IOException {
-        return new SimpleCompactMultiMap<>(new ObjectSimpleBytePackager<>(blockSizeKb));
+        return new CompactMultiMap<>(new ObjectBytePackager<>(blockSizeKb));
     }
 
-    private SimpleCompactMultiMap(SimpleBytePackager<V> packager) throws IOException {
+    private CompactMultiMap(BytePackager<V> packager) throws IOException {
         this.packager = packager;
         this.noncompressedMap = new HashMap<>();
         this.compressedMap = new HashMap<>();

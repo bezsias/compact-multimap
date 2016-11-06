@@ -4,7 +4,7 @@ import java.io.*;
 import java.util.*;
 import java.util.zip.*;
 
-abstract class AbstractSimpleBytePackager<T extends Serializable> implements SimpleBytePackager<T>{
+abstract class AbstractBytePackager<T extends Serializable> implements BytePackager<T> {
 
     private static int LENGTH_SPACE = 2; // first 2 byte is the size of compressed data
     private static byte[] LENGTH_BYTES = new byte[]{ Util.ZERO_BYTE, Util.ZERO_BYTE };
@@ -12,7 +12,7 @@ abstract class AbstractSimpleBytePackager<T extends Serializable> implements Sim
     private int blockSize;
     ByteArrayOutputStream baos;
 
-    AbstractSimpleBytePackager(int blockSizeKb) throws IOException {
+    AbstractBytePackager(int blockSizeKb) throws IOException {
         this.blockSize = blockSizeKb * 1024;
         this.baos = new ByteArrayOutputStream(blockSize);
     }
