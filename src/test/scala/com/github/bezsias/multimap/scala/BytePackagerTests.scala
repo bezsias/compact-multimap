@@ -57,7 +57,7 @@ class BytePackagerTests extends FunSpecLike with Matchers {
       testPackBatch(2000)
     }
 
-    it("should pack/unpack multiple compressed item (batch") {
+    it("should pack/unpack multiple compressed item (batch)") {
       testPackBatch(10000, 5)
     }
 
@@ -68,7 +68,11 @@ class BytePackagerTests extends FunSpecLike with Matchers {
   }
 
   describe("IntBytePackager Tests") {
-    new BytePackagerTester[Integer](IntBytePackager(1), Random.nextInt)
+    new BytePackagerTester[Integer](IntBytePackager(1), Random.nextInt(100))
+  }
+
+  describe("ShortBytePackager Tests") {
+    new BytePackagerTester[Short](ShortBytePackager(2).asInstanceOf[BytePackager[Short]], Random.nextInt(100).toShort)
   }
 
 }

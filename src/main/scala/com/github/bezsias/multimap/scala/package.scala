@@ -17,4 +17,7 @@ package object scala {
 
   type IntBytePackager = multimap.IntBytePackager
   def IntBytePackager(blockSizeKb: Int = 64) = new multimap.IntBytePackager(blockSizeKb)
+
+  type ShortBytePackager = multimap.ShortBytePackager
+  def ShortBytePackager(blockSizeKb: Int = 64) = new multimap.ShortBytePackager(blockSizeKb)
 }

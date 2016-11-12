@@ -48,13 +48,13 @@ class MultiMapBenchmarks extends FunSpecLike with Matchers {
   test(1, 100, 1, 100)
   test(1, 100, 1, 1000)
   test(1, 100, 1, 5000)
-  test(1, 100, 1, 10000)
-  test(1, 100, 1, 15000)
+//  test(1, 100, 1, 10000)
+//  test(1, 100, 1, 15000)
 
   test(64, 100, 1, 100)
   test(64, 100, 1, 1000)
   test(64, 100, 1, 5000)
-  test(64, 100, 1, 10000)
-  test(64, 100, 1, 15000)
+//  test(64, 100, 1, 10000)
+//  test(64, 100, 1, 15000)
 
 }

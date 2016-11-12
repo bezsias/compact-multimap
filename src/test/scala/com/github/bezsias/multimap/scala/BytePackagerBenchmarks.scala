@@ -7,7 +7,7 @@ import scala.util.Random
 
 class BytePackagerBenchmarks extends FunSpecLike with Matchers {
 
-  class BytePackagerTester[T](packager: BytePackager[T], generator: => T, expectedBytes: Int, n: Int) {
+  class BytePackagerTester[T](packager: BytePackager[T], generator: => T, expectedBytes: Int, n: Int, blockSizeKb: Int) {
 
     def test(n: Int): String = {
       val time = System.currentTimeMillis()
@@ -21,46 +21,30 @@ class BytePackagerBenchmarks extends FunSpecLike with Matchers {
 
       val elapsed = System.currentTimeMillis() - time
 
-      s"raw: $expectedLength, packed: $packedSize bytes, inflation: ${"%02.2f".format(inflation * 100)}%, $elapsed ms"
+      s"buffer: ${blockSizeKb}K, items: $n, data: $expectedLength, packed: $packedSize bytes, inflation: ${"%02.2f".format(inflation * 100)}%, $elapsed ms"
     }
 
     it(s"${test(n)}") {}
   }
 
-  def stringTests(blockSizeKb: Int, length: Int, n: Int = 1000): Unit = {
-    val stringLengthOverhead = 4
-    val expectedLength = 3 * length + stringLengthOverhead
-
-    describe(s"string byte packager (${blockSizeKb}K buffer, $n items)") {
-      new BytePackagerTester[String](ObjectBytePackager[String](blockSizeKb), Random.nextString(length), expectedLength, n)
+  def desc(name: String, count: Int, init: (Int, Int) => Unit) = {
+    describe(s"$name byte packager ") {
+      0.to(6).foreach(p => init(Math.pow(2, p).toInt, count))
     }
   }
 
-  stringTests(1, 5, 1000)
-  stringTests(1, 5, 5000)
-  stringTests(1, 5, 10000)
+  desc("string", 1000, (blockSizeKb, n) => {
+    val length = 100
+    new BytePackagerTester[String](ObjectBytePackager[String](blockSizeKb), randomString(length), length, n, blockSizeKb)
+  })
 
-  stringTests(2, 5)
+  desc("int", 5000, (blockSizeKb, n) => {
+    new BytePackagerTester[Integer](IntBytePackager(blockSizeKb), Random.nextInt(100), 4, n, blockSizeKb)
+  })
 
-  stringTests(4, 5)
-
-  stringTests(8, 5)
-
-  stringTests(16, 5)
-
-  stringTests(1, 25)
-
-  stringTests(2, 50)
-
-  stringTests(4, 100)
-
-  stringTests(8, 100)
-
-  stringTests(16, 100)
-
-  stringTests(32, 100)
-
-  stringTests(64, 100, 1000)
-  stringTests(64, 100, 5000)
+  desc("short", 10000, (blockSizeKb, n) => {
+    val packager: BytePackager[Short] = ShortBytePackager(blockSizeKb).asInstanceOf[BytePackager[Short]]
+    new BytePackagerTester[Short](packager, Random.nextInt(100).toShort, 2, n, blockSizeKb)
+  })
 
 }
