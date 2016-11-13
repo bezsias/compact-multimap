@@ -1,6 +1,6 @@
 package com.github.bezsias.multimap.scala
 
-import com.github.bezsias.multimap.{BytePack, BytePackager}
+import com.github.bezsias.multimap.{BytePack, BytePackager, PrimitiveBytePackager}
 import org.scalatest._
 
 import scala.collection.JavaConverters._
@@ -68,11 +68,11 @@ class BytePackagerTests extends FunSpecLike with Matchers {
   }
 
   describe("IntBytePackager Tests") {
-    new BytePackagerTester[Integer](IntBytePackager(1), Random.nextInt(100))
+    new BytePackagerTester[Integer](PrimitiveBytePackager.intBytePackager(1), Random.nextInt(100))
   }
 
   describe("ShortBytePackager Tests") {
-    new BytePackagerTester[Short](ShortBytePackager(2).asInstanceOf[BytePackager[Short]], Random.nextInt(100).toShort)
+    new BytePackagerTester[Short](PrimitiveBytePackager.shortBytePackager(2).asInstanceOf[BytePackager[Short]], Random.nextInt(100).toShort)
   }
 
 }

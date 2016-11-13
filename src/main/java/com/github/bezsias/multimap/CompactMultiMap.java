@@ -1,6 +1,6 @@
 package com.github.bezsias.multimap;
 
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 import java.io.Serializable;
 
@@ -17,11 +17,11 @@ public class CompactMultiMap<K, V extends Serializable> implements MultiMap<K, V
 
 
     public static <K> MultiMap<K, Short> shortMultiMap(int blockSizeKb) throws IOException {
-        return new CompactMultiMap<>(new ShortBytePackager(blockSizeKb));
+        return new CompactMultiMap<>(PrimitiveBytePackager.shortBytePackager(blockSizeKb));
     }
 
     public static <K> MultiMap<K, Integer> intMultiMap(int blockSizeKb) throws IOException {
-        return new CompactMultiMap<>(new IntBytePackager(blockSizeKb));
+        return new CompactMultiMap<>(PrimitiveBytePackager.intBytePackager(blockSizeKb));
     }
 
     public static <K, V extends Serializable> MultiMap<K, V> objMultiMap(int blockSizeKb) throws IOException {
