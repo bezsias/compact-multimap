@@ -28,7 +28,6 @@ Get and remove operations are computationally more expensive compared to standar
 
 ## Usage
 
-
 #### Java
 
 ```java
@@ -62,8 +61,28 @@ map.get("b");
 res5: List[String] = List(1)
 ```
 
+## Installation
+
+You can get compact-multimap from [maven central].
+
+#### Maven
+```
+<dependency>
+    <groupId>com.github.bezsias</groupId>
+    <artifactId>compact-multimap_2.11</artifactId>
+    <version>0.8.1</version>
+</dependency>
+```
+
+#### Sbt
+
+```
+libraryDependencies += "com.github.bezsias" % "compact-multimap_2.11" % "0.8.1"
+```
+
 ## License
 
 Distributed under [MIT license](http://choosealicense.com/licenses/mit/).
 
 [multimap]: https://en.wikipedia.org/wiki/Multimap
+[maven central]: http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22compact-multimap_2.11%22
