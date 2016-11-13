@@ -2,14 +2,16 @@ package com.github.bezsias.multimap.scala
 
 import org.scalatest._
 
+import scala.util.Random
+
 class CompactMultiMapTest extends FunSpecLike with Matchers {
 
-  describe("CompactMultiMap Tests") {
+  class MultimapTester[K, V](mapGen: => MultiMap[K, V], keyGen: => K, valueGen: => V) {
 
-    val key = "some key"
-    val value = "some value"
+    private val key = keyGen
+    private val value = valueGen
 
-    def assertEmptyMap(map: MultiMap[String, String]): Unit = {
+    private def assertEmptyMap(map: MultiMap[K, V]): Unit = {
       map.size shouldBe 0
       map.keys shouldBe Set()
       map.isEmpty shouldBe true
@@ -18,32 +20,31 @@ class CompactMultiMapTest extends FunSpecLike with Matchers {
     describe("empty tests") {
 
       it("should init an empty map") {
-        val map = CompactMultiMap.objMap[String, String]()
+        val map = mapGen
 
         assertEmptyMap(map)
       }
 
       it("should clear an empty map") {
-        val map = CompactMultiMap.objMap[String, String]()
+        val map = mapGen
         map.clear()
 
         assertEmptyMap(map)
       }
 
       it("should clear a non empty map") {
-        val map = CompactMultiMap.objMap[String, String]()
-        map.put(key, value)
+        val map = mapGen
+        map.put(keyGen, valueGen)
         map.clear()
 
         assertEmptyMap(map)
       }
     }
 
-
     describe("put tests") {
 
       it("should put a single item") {
-        val map = CompactMultiMap.objMap[String, String]()
+        val map = mapGen
         map.put(key, value)
 
         map.size shouldBe 1
@@ -54,7 +55,7 @@ class CompactMultiMapTest extends FunSpecLike with Matchers {
       }
 
       it("should put a single item multiple times") {
-        val map = CompactMultiMap.objMap[String, String]()
+        val map = mapGen
         map.put(key, value)
         map.put(key, value)
         map.put(key, value)
@@ -67,10 +68,10 @@ class CompactMultiMapTest extends FunSpecLike with Matchers {
       }
 
       it("should put multiple distinct keyed items") {
-        val map = CompactMultiMap.objMap[String, String]()
+        val map = mapGen
         val n = 100
-        val keys = 1.to(n).map(idx => key + idx)
-        val values = 1.to(n).map(idx => value + idx)
+        val keys = 1.to(n).map(idx => keyGen)
+        val values = 1.to(n).map(idx => valueGen)
 
         val keyvalues = keys zip values
         keyvalues.foreach { case (k, v) => map.put(k, v) }
@@ -80,16 +81,15 @@ class CompactMultiMapTest extends FunSpecLike with Matchers {
         keys.forall(map.contains) shouldBe true
         keyvalues.forall { case (k, v) => map.contains(k, v) } shouldBe true
         keyvalues.forall { case (k, v) => map.get(k) == List(v) } shouldBe true
-
       }
 
       it("should put multiple items") {
-        val map = CompactMultiMap.objMap[String, String]()
+        val map = mapGen
         val n = 100
         val keyvalues = 1.to(n).map { idx =>
-          val k = key + idx
+          val k = keyGen
           val vs = 1.to(idx).map { idx =>
-            val v = value + idx
+            val v = valueGen
             map.put(k, v)
             v
           }
@@ -104,27 +104,26 @@ class CompactMultiMapTest extends FunSpecLike with Matchers {
 
         keyvalues.forall { case (k, vs) => vs.forall(map.contains(k, _)) } shouldBe true
         keyvalues.forall { case (k, vs) => map.get(k) == vs.toList } shouldBe true
-
       }
     }
 
     describe("remove key tests") {
 
       it("should not remove from empty map") {
-        val map = CompactMultiMap.objMap[String, String]()
+        val map = mapGen
         map.remove(key)
         assertEmptyMap(map)
       }
 
       it("should remove a single item") {
-        val map = CompactMultiMap.objMap[String, String]()
+        val map = mapGen
         map.put(key, value)
         map.remove(key)
         assertEmptyMap(map)
       }
 
       it("should remove multiple items") {
-        val map = CompactMultiMap.objMap[String, String]()
+        val map = mapGen
         map.put(key, value)
         map.put(key, value)
         map.put(key, value)
@@ -134,10 +133,10 @@ class CompactMultiMapTest extends FunSpecLike with Matchers {
       }
 
       it("should remove multiple distinct keyed items") {
-        val map = CompactMultiMap.objMap[String, String]()
+        val map = mapGen
         val n = 100
-        val keys = 1.to(n).map(idx => key + idx)
-        val values = 1.to(n).map(idx => value + idx)
+        val keys = 1.to(n).map(idx => keyGen)
+        val values = 1.to(n).map(idx => valueGen)
 
         val keyvalues = keys zip values
         keyvalues.foreach { case (k, v) => map.put(k, v) }
@@ -148,12 +147,12 @@ class CompactMultiMapTest extends FunSpecLike with Matchers {
       }
 
       it("should remove multiple items (complex)") {
-        val map = CompactMultiMap.objMap[String, String]()
+        val map = mapGen
         val n = 100
         val keyvalues = 1.to(n).map { idx =>
-          val k = key + idx
+          val k = keyGen
           val vs = 1.to(idx).map { idx =>
-            val v = value + idx
+            val v = valueGen
             map.put(k, v)
             v
           }
@@ -169,20 +168,20 @@ class CompactMultiMapTest extends FunSpecLike with Matchers {
     describe("remove key-value tests") {
 
       it("should not remove from empty map") {
-        val map = CompactMultiMap.objMap[String, String]()
+        val map = mapGen
         map.remove(key)
         assertEmptyMap(map)
       }
 
       it("should remove a single item") {
-        val map = CompactMultiMap.objMap[String, String]()
+        val map = mapGen
         map.put(key, value)
         map.remove(key, value)
         assertEmptyMap(map)
       }
 
       it("should remove multiple items") {
-        val map = CompactMultiMap.objMap[String, String]()
+        val map = mapGen
         map.put(key, value)
         map.put(key, value)
         map.put(key, value)
@@ -192,10 +191,10 @@ class CompactMultiMapTest extends FunSpecLike with Matchers {
       }
 
       it("should remove multiple distinct keyed items") {
-        val map = CompactMultiMap.objMap[String, String]()
+        val map = mapGen
         val n = 100
-        val keys = 1.to(n).map(idx => key + idx)
-        val values = 1.to(n).map(idx => value + idx)
+        val keys = 1.to(n).map(idx => keyGen)
+        val values = 1.to(n).map(idx => valueGen)
 
         val keyvalues = keys zip values
         keyvalues.foreach { case (k, v) => map.put(k, v) }
@@ -206,12 +205,12 @@ class CompactMultiMapTest extends FunSpecLike with Matchers {
       }
 
       it("should remove multiple items (complex)") {
-        val map = CompactMultiMap.objMap[String, String]()
-        val n = 2
+        val map = mapGen
+        val n = 10
         val keyvalues = 1.to(n).map { idx =>
-          val k = key + idx
+          val k = keyGen
           val vs = 1.to(idx).map { idx =>
-            val v = value + idx
+            val v = valueGen
             map.put(k, v)
             v
           }
@@ -224,4 +223,29 @@ class CompactMultiMapTest extends FunSpecLike with Matchers {
       }
     }
   }
+
+  describe("String CompactMultiMap") {
+    new MultimapTester[String, String](
+      CompactMultiMap.objMap[String, String](),
+      randomString(10),
+      randomString(10)
+    )
+  }
+
+  describe("Int CompactMultiMap") {
+    new MultimapTester[String, Int](
+      CompactMultiMap.intMap[String](),
+      randomString(10),
+      Random.nextInt(100)
+    )
+  }
+
+  describe("Short CompactMultiMap") {
+    new MultimapTester[String, Short](
+      CompactMultiMap.shortMap[String](),
+      randomString(10),
+      Random.nextInt(100).toShort
+    )
+  }
+
 }
