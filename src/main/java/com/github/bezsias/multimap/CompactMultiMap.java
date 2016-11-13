@@ -15,17 +15,16 @@ public class CompactMultiMap<K, V extends Serializable> implements MultiMap<K, V
     private int _size = 0;
     private BytePackager<V> packager;
 
-
     public static <K> MultiMap<K, Short> shortMultiMap(int blockSizeKb) throws IOException {
-        return new CompactMultiMap<>(PrimitiveBytePackager.shortBytePackager(blockSizeKb));
+        return new CompactMultiMap<>(BytePackager.shortBytePackager(blockSizeKb));
     }
 
     public static <K> MultiMap<K, Integer> intMultiMap(int blockSizeKb) throws IOException {
-        return new CompactMultiMap<>(PrimitiveBytePackager.intBytePackager(blockSizeKb));
+        return new CompactMultiMap<>(BytePackager.intBytePackager(blockSizeKb));
     }
 
     public static <K, V extends Serializable> MultiMap<K, V> objMultiMap(int blockSizeKb) throws IOException {
-        return new CompactMultiMap<>(new ObjectBytePackager<>(blockSizeKb));
+        return new CompactMultiMap<>(BytePackager.objBytePackager(blockSizeKb));
     }
 
     private CompactMultiMap(BytePackager<V> packager) throws IOException {

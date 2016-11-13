@@ -1,6 +1,6 @@
 package com.github.bezsias.multimap.scala
 
-import com.github.bezsias.multimap.{BytePack, BytePackager, PrimitiveBytePackager}
+import com.github.bezsias.multimap.{BytePack, BytePackager}
 import org.scalatest.{FunSpecLike, Matchers}
 
 import scala.util.Random
@@ -35,16 +35,16 @@ class BytePackagerBenchmarks extends FunSpecLike with Matchers {
 
   desc("string", 1000, (blockSizeKb, n) => {
     val length = 100
-    new BytePackagerTester[String](ObjectBytePackager[String](blockSizeKb), randomString(length), length, n, blockSizeKb)
+    new BytePackagerTester[String](BytePackager.objBytePackager(blockSizeKb), randomString(length), length, n, blockSizeKb)
   })
 
   desc("int", 5000, (blockSizeKb, n) => {
     new BytePackagerTester[Integer](
-        PrimitiveBytePackager.intBytePackager(blockSizeKb), Random.nextInt(100), 4, n, blockSizeKb)
+        BytePackager.intBytePackager(blockSizeKb), Random.nextInt(100), 4, n, blockSizeKb)
   })
 
   desc("short", 10000, (blockSizeKb, n) => {
-    val packager: BytePackager[Short] = PrimitiveBytePackager.shortBytePackager(blockSizeKb).asInstanceOf[BytePackager[Short]]
+    val packager: BytePackager[Short] = BytePackager.shortBytePackager(blockSizeKb).asInstanceOf[BytePackager[Short]]
     new BytePackagerTester[Short](packager, Random.nextInt(100).toShort, 2, n, blockSizeKb)
   })
 
