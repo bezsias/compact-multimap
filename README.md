@@ -28,8 +28,27 @@ Get and remove operations are computationally more expensive compared to standar
 
 ## Usage
 
+
+#### Java
+
+```java
+import com.github.bezsias.multimap.*;
+import java.util.*;
+
+MultiMap<String, String> map = CompactMultiMap.objMultiMap(8);
+map.put("a", "1");
+map.put("a", "2");
+map.put("b", "1");
+map.put("a", "3");
+
+List<String> values = map.get("a");
+```
+
+#### Scala
+
 ```scala
 import com.github.bezsias.multimap.scala._
+
 val map = CompactMultiMap.objMap[String, String]()
 map.put("a", "1");
 map.put("a", "2");
@@ -43,9 +62,7 @@ map.get("b");
 res5: List[String] = List(1)
 ```
 
-## Copyright and License
-
-Copyright © Bela Ezsias.
+## License
 
 Distributed under [MIT license](http://choosealicense.com/licenses/mit/).
 
