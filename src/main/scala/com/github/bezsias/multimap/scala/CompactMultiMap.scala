@@ -2,9 +2,7 @@ package com.github.bezsias.multimap.scala
 
 import com.github.bezsias._
 
-case class CompactMultiMap[K, V <: java.io.Serializable] private (
-  map: multimap.MultiMap[K, V]
-) extends MultiMap[K, V] {
+case class CompactMultiMap[K, V] private (map: multimap.MultiMap[K, V]) extends MultiMap[K, V] {
   import collection.JavaConverters._
 
   override def size: Int = map.size
@@ -37,12 +35,16 @@ object CompactMultiMap {
   def objMap[K, V <: java.io.Serializable](blockSizeKb: Int = 8): CompactMultiMap[K, V] =
     new CompactMultiMap[K, V](multimap.CompactMultiMap.objMultiMap[K, V](blockSizeKb))
 
-  def intMap[K](blockSizeKb: Int = 8): CompactMultiMap[K, Integer] =
-    new CompactMultiMap[K, Integer](multimap.CompactMultiMap.intMultiMap[K](blockSizeKb))
+  def intMap[K](blockSizeKb: Int = 8): CompactMultiMap[K, Int] = {
+    new CompactMultiMap[K, Int](
+      multimap.CompactMultiMap.intMultiMap[K](blockSizeKb).asInstanceOf[multimap.MultiMap[K, Int]]
+    )
+  }
 
-  def shortMap[K](blockSizeKb: Int = 8): CompactMultiMap[K, java.lang.Short] = {
-    val map = multimap.CompactMultiMap.shortMultiMap[K](blockSizeKb)
-    new CompactMultiMap[K, java.lang.Short](map)
+  def shortMap[K](blockSizeKb: Int = 8): MultiMap[K, Short] = {
+    new CompactMultiMap[K, Short](
+      multimap.CompactMultiMap.shortMultiMap[K](blockSizeKb).asInstanceOf[multimap.MultiMap[K, Short]]
+    )
   }
 
 }
