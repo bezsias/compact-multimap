@@ -39,6 +39,10 @@ public class BytePack {
         noncompressed = EMPTY_BYTE_ARRAY;
     }
 
+    boolean justCompressed() {
+        return compressed != null && compressed.length > 0 && noncompressed.length == 0;
+    }
+
     public int size() {
         if (compressed == null )
             return noncompressed.length;

@@ -5,6 +5,7 @@ import java.util.*;
 
 class BytePackagerImpl<T extends Serializable> extends AbstractBytePackager<T> {
     private ObjectOutputStream oos;
+    private DataOutputStream dos;
     private Writer<T> writer;
     private Reader<T> reader;
 
@@ -24,13 +25,14 @@ class BytePackagerImpl<T extends Serializable> extends AbstractBytePackager<T> {
         this.reader = reader;
         this.writer = writer;
         this.oos = new ObjectOutputStream(baos);
+        this.dos = new DataOutputStream(baos);
         baos.reset(); // clear header
     }
 
     @Override
     protected void read(InputStream is, ArrayList<T> list) throws IOException, ClassNotFoundException {
-        try(OIS ois = new OIS(is)) {
-            while (true) list.add(reader.read(ois));
+        try(OIS ois = new OIS(is); DataInputStream dis = new DataInputStream(is)) {
+            while (true) list.add(reader.read(ois, dis));
         } catch (EOFException e) {}
     }
 
@@ -40,7 +42,7 @@ class BytePackagerImpl<T extends Serializable> extends AbstractBytePackager<T> {
         baos.write(pack.noncompressed);
         if (values.isEmpty()) return pack;
         for (int i = 0, n = values.size(); i < n; i++) {
-            writer.write(values.get(i), oos);
+            writer.write(values.get(i), oos, dos);
         }
         return flushStream(pack);
     }
@@ -49,13 +51,15 @@ class BytePackagerImpl<T extends Serializable> extends AbstractBytePackager<T> {
     public BytePack pack(BytePack pack, T value) throws IOException {
         baos.reset();
         baos.write(pack.noncompressed);
-        writer.write(value, oos);
+        writer.write(value, oos, dos);
         return flushStream(pack);
     }
 
     private BytePack flushStream(BytePack pack) throws IOException {
         oos.flush();
-        oos.reset();
-        return append(pack, baos.toByteArray());
+        dos.flush();
+        BytePack bytePack = append(pack, baos.toByteArray());
+        if (bytePack.justCompressed()) oos.reset(); // reset stream after a block compress
+        return bytePack;
     }
 }

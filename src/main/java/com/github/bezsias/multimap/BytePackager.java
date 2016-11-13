@@ -11,16 +11,36 @@ public interface BytePackager<T> {
 
     ArrayList<T> unpack(BytePack pack) throws IOException, ClassNotFoundException;
 
+    static BytePackager<Boolean> booleanBytePackager(int blockSizeKb) throws IOException {
+        return new BytePackagerImpl<>(blockSizeKb, (ois, dis) -> dis.readBoolean(), (value, oss, dos) -> dos.writeBoolean(value));
+    }
+
+    static BytePackager<Byte> byteBytePackager(int blockSizeKb) throws IOException {
+        return new BytePackagerImpl<>(blockSizeKb, (ois, dis) -> dis.readByte(), (value, oss, dos) -> dos.writeByte(value));
+    }
+
     static BytePackager<Short> shortBytePackager(int blockSizeKb) throws IOException {
-        return new BytePackagerImpl<>(blockSizeKb, ObjectInputStream::readShort, (value, os) -> os.writeShort(value));
+        return new BytePackagerImpl<>(blockSizeKb, (ois, dis) -> dis.readShort(), (value, oss, dos) -> dos.writeShort(value));
     }
 
     static BytePackager<Integer> intBytePackager(int blockSizeKb) throws IOException {
-        return new BytePackagerImpl<>(blockSizeKb, ObjectInputStream::readInt, (value, os) -> os.writeInt(value));
+        return new BytePackagerImpl<>(blockSizeKb, (ois, dis) -> dis.readInt(), (value, oss, dos) -> dos.writeInt(value));
+    }
+
+    static BytePackager<Long> longBytePackager(int blockSizeKb) throws IOException {
+        return new BytePackagerImpl<>(blockSizeKb, (ois, dis) -> dis.readLong(), (value, oss, dos) -> dos.writeLong(value));
+    }
+
+    static BytePackager<Float> floatBytePackager(int blockSizeKb) throws IOException {
+        return new BytePackagerImpl<>(blockSizeKb, (ois, dis) -> dis.readFloat(), (value, oss, dos) -> dos.writeFloat(value));
+    }
+
+    static BytePackager<Double> doubleBytePackager(int blockSizeKb) throws IOException {
+        return new BytePackagerImpl<>(blockSizeKb, (ois, dis) -> dis.readDouble(), (value, oss, dos) -> dos.writeDouble(value));
     }
 
     static <T extends java.io.Serializable> BytePackager<T> objBytePackager(int blockSizeKb) throws IOException {
-        return new BytePackagerImpl<>(blockSizeKb, is -> (T) is.readObject(), (value, os) -> os.writeObject(value));
+        return new BytePackagerImpl<>(blockSizeKb, (ois, dis) -> (T) ois.readObject(), (value, oss, dos) -> oss.writeObject(value));
     }
 
 }

@@ -63,16 +63,36 @@ class BytePackagerTests extends FunSpecLike with Matchers {
 
   }
 
-  describe("ObjectBytePackager Tests") {
+  describe("Boolean BytePackager Tests") {
+    new BytePackagerTester[Boolean](BytePackager.booleanBytePackager(1).asInstanceOf[BytePackager[Boolean]], Random.nextBoolean)
+  }
+
+  describe("Byte BytePackager Tests") {
+    new BytePackagerTester[Byte](BytePackager.byteBytePackager(1).asInstanceOf[BytePackager[Byte]], Random.nextInt(100).toByte)
+  }
+
+  describe("Short BytePackager Tests") {
+    new BytePackagerTester[Short](BytePackager.shortBytePackager(1).asInstanceOf[BytePackager[Short]], Random.nextInt(100).toShort)
+  }
+
+  describe("Int BytePackager Tests") {
+    new BytePackagerTester[Int](BytePackager.intBytePackager(1).asInstanceOf[BytePackager[Int]], Random.nextInt(100))
+  }
+
+  describe("Long BytePackager Tests") {
+    new BytePackagerTester[Long](BytePackager.longBytePackager(1).asInstanceOf[BytePackager[Long]], Random.nextInt(100).toLong)
+  }
+
+  describe("Float BytePackager Tests") {
+    new BytePackagerTester[Float](BytePackager.floatBytePackager(1).asInstanceOf[BytePackager[Float]], Random.nextFloat())
+  }
+
+  describe("Double BytePackager Tests") {
+    new BytePackagerTester[Double](BytePackager.doubleBytePackager(1).asInstanceOf[BytePackager[Double]], Random.nextDouble())
+  }
+
+  describe("Object BytePackager Tests") {
     new BytePackagerTester[String](BytePackager.objBytePackager(1), randomString(5))
-  }
-
-  describe("IntBytePackager Tests") {
-    new BytePackagerTester[Integer](BytePackager.intBytePackager(1), Random.nextInt(100))
-  }
-
-  describe("ShortBytePackager Tests") {
-    new BytePackagerTester[Short](BytePackager.shortBytePackager(2).asInstanceOf[BytePackager[Short]], Random.nextInt(100).toShort)
   }
 
 }
