@@ -224,28 +224,36 @@ class CompactMultiMapTest extends FunSpecLike with Matchers {
     }
   }
 
-  describe("String CompactMultiMap") {
-    new MultimapTester[String, String](
-      CompactMultiMap.objMap[String, String](),
-      randomString(10),
-      randomString(10)
-    )
+  describe("Boolean CompactMultiMap") {
+    new MultimapTester[String, Boolean](CompactMultiMap.booleanMap[String](), randomString(10), Random.nextBoolean())
   }
 
-  describe("Int CompactMultiMap") {
-    new MultimapTester[String, Int](
-      CompactMultiMap.intMap[String](),
-      randomString(10),
-      Random.nextInt(100)
-    )
+  describe("Byte CompactMultiMap") {
+    new MultimapTester[String, Byte](CompactMultiMap.byteMap[String](), randomString(10), Random.nextInt(100).toByte)
   }
 
   describe("Short CompactMultiMap") {
-    new MultimapTester[String, Short](
-      CompactMultiMap.shortMap[String](),
-      randomString(10),
-      Random.nextInt(100).toShort
-    )
+    new MultimapTester[String, Short](CompactMultiMap.shortMap[String](), randomString(10), Random.nextInt(100).toShort)
+  }
+
+  describe("Int CompactMultiMap") {
+    new MultimapTester[String, Int](CompactMultiMap.intMap[String](), randomString(10), Random.nextInt(100))
+  }
+
+  describe("Long CompactMultiMap") {
+    new MultimapTester[String, Long](CompactMultiMap.longMap[String](), randomString(10), Random.nextLong)
+  }
+
+  describe("Float CompactMultiMap") {
+    new MultimapTester[String, Float](CompactMultiMap.floatMap[String](), randomString(10), Random.nextFloat)
+  }
+
+  describe("Double CompactMultiMap") {
+    new MultimapTester[String, Double](CompactMultiMap.doubleMap[String](), randomString(10), Random.nextDouble())
+  }
+
+  describe("String CompactMultiMap") {
+    new MultimapTester[String, String](CompactMultiMap.objectMap[String, String](), randomString(10), randomString(10))
   }
 
 }

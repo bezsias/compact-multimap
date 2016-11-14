@@ -28,7 +28,7 @@ class MultiMapBenchmarks extends FunSpecLike with Matchers {
 
       val dataSize = keySize + valueSize
 
-      val mapSize = keySize + map.memoryUsage()
+      val mapSize = keySize + map.memoryUsage
 
       val inflation = mapSize / dataSize.toDouble
 
@@ -40,7 +40,7 @@ class MultiMapBenchmarks extends FunSpecLike with Matchers {
 
   def test(blockSizeKb: Int, length: Int, keyCount: Int, valueCount: Int): Unit = {
     describe(s"string multimap (${blockSizeKb}K buffer, $length bytes, $keyCount keys, $valueCount values)") {
-      val map = CompactMultiMap.objMap[String, String](blockSizeKb)
+      val map = CompactMultiMap.objectMap[String, String](blockSizeKb)
       new MultiMapTester(map, randomString(length), keyCount, valueCount)
     }
   }

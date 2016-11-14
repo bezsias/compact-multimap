@@ -8,14 +8,13 @@ Works well for collecting large amount of "append-only" data in-memory.
  * Low memory usage due to byte array representation in values.
  * Values are compressed automatically above a certain size.
  * Supports ordered list of values, duplicates are possible. 
+ * Specialized implementation for primitive values.
  * Efficient put operations.
  * Single threaded.
  * Scala wrapper.
  
 ## Planned features
-
- * Specialized implementation for primitive values. (*in progress*)
- * Specialized implementation for efficient primitive key support.
+ * Specialized implementation for primitive keys *(coming soon)*.
 
 ## Missing features
 
@@ -34,7 +33,7 @@ Get and remove operations are computationally more expensive compared to standar
 import com.github.bezsias.multimap.*;
 import java.util.*;
 
-MultiMap<String, String> map = CompactMultiMap.objMultiMap(8);
+MultiMap<String, String> map = CompactMultiMap.objectMap(8);
 map.put("a", "1");
 map.put("a", "2");
 map.put("b", "1");
@@ -48,7 +47,7 @@ List<String> values = map.get("a");
 ```scala
 import com.github.bezsias.multimap.scala._
 
-val map = CompactMultiMap.objMap[String, String]()
+val map = CompactMultiMap.objectMap[String, String]()
 map.put("a", "1");
 map.put("a", "2");
 map.put("b", "1");
