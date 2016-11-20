@@ -33,7 +33,7 @@ Get and remove operations are computationally more expensive compared to standar
 import com.github.bezsias.multimap.*;
 import java.util.*;
 
-MultiMap<String, String> map = CompactMultiMap.objectMap(8);
+MultiMap<String, String> map = new MultiMapBuilder<String>().objectMap();
 map.put("a", "1");
 map.put("a", "2");
 map.put("b", "1");

@@ -15,42 +15,10 @@ public class CompactMultiMap<K, V extends Serializable> implements MultiMap<K, V
     private int _size = 0;
     private BytePackager<V> packager;
 
-    public static <K> MultiMap<K, Boolean> booleanMap(int blockSizeKb) throws IOException {
-        return new CompactMultiMap<>(BytePackager.booleanBytePackager(blockSizeKb));
-    }
-
-    public static <K> MultiMap<K, Byte> byteMap(int blockSizeKb) throws IOException {
-        return new CompactMultiMap<>(BytePackager.byteBytePackager(blockSizeKb));
-    }
-
-    public static <K> MultiMap<K, Short> shortMap(int blockSizeKb) throws IOException {
-        return new CompactMultiMap<>(BytePackager.shortBytePackager(blockSizeKb));
-    }
-
-    public static <K> MultiMap<K, Integer> intMap(int blockSizeKb) throws IOException {
-        return new CompactMultiMap<>(BytePackager.intBytePackager(blockSizeKb));
-    }
-
-    public static <K> MultiMap<K, Long> longMap(int blockSizeKb) throws IOException {
-        return new CompactMultiMap<>(BytePackager.longBytePackager(blockSizeKb));
-    }
-
-    public static <K> MultiMap<K, Float> floatMap(int blockSizeKb) throws IOException {
-        return new CompactMultiMap<>(BytePackager.floatBytePackager(blockSizeKb));
-    }
-
-    public static <K> MultiMap<K, Double> doubleMap(int blockSizeKb) throws IOException {
-        return new CompactMultiMap<>(BytePackager.doubleBytePackager(blockSizeKb));
-    }
-
-    public static <K, V extends Serializable> MultiMap<K, V> objectMap(int blockSizeKb) throws IOException {
-        return new CompactMultiMap<>(BytePackager.objBytePackager(blockSizeKb));
-    }
-
-    private CompactMultiMap(BytePackager<V> packager) throws IOException {
+    CompactMultiMap(BytePackager<V> packager, MapFactory<K> mapFactory) throws IOException {
         this.packager = packager;
-        this.noncompressedMap = new HashMap<>();
-        this.compressedMap = new HashMap<>();
+        this.noncompressedMap = mapFactory.createMap();
+        this.compressedMap = mapFactory.createMap();
     }
 
     public int memoryUsage() {

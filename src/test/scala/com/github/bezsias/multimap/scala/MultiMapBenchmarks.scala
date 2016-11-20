@@ -5,7 +5,7 @@ import org.scalatest.{FunSpecLike, Matchers}
 class MultiMapBenchmarks extends FunSpecLike with Matchers {
 
   class MultiMapTester (
-    map: CompactMultiMap[String, String],
+    map: MultiMap[String, String],
     gen: => String,
     keyCount: Int,
     valueCount: Int
@@ -40,8 +40,7 @@ class MultiMapBenchmarks extends FunSpecLike with Matchers {
 
   def test(blockSizeKb: Int, length: Int, keyCount: Int, valueCount: Int): Unit = {
     describe(s"string multimap (${blockSizeKb}K buffer, $length bytes, $keyCount keys, $valueCount values)") {
-      val map = CompactMultiMap.objectMap[String, String](blockSizeKb)
-      new MultiMapTester(map, randomString(length), keyCount, valueCount)
+      new MultiMapTester(CompactMultiMap.objectMap(blockSizeKb), randomString(length), keyCount, valueCount)
     }
   }
 

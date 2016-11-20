@@ -1,6 +1,11 @@
 package com.github.bezsias.multimap.scala
 
+import java.util
+
 import com.github.bezsias._
+import com.github.bezsias.multimap.{MapFactory, MultiMapBuilder}
+
+import scala.collection.immutable.HashMap
 
 case class CompactMultiMap[K, V] private (map: multimap.MultiMap[K, V]) extends MultiMap[K, V] {
   import collection.JavaConverters._
@@ -31,29 +36,43 @@ case class CompactMultiMap[K, V] private (map: multimap.MultiMap[K, V]) extends 
 }
 
 object CompactMultiMap {
+  private val DEFAULT_BLOCK = 8
 
-  def booleanMap[K](blockSizeKb: Int = 8): MultiMap[K, Boolean] =
-    new CompactMultiMap[K, Boolean](multimap.CompactMultiMap.booleanMap[K](blockSizeKb).asInstanceOf[multimap.MultiMap[K, Boolean]])
+  private def DEFAULT_MAP_FACTORY[K] = new MapFactory[K] {
+    override def createMap(): util.Map[K, Array[Byte]] = new util.HashMap()
+  }
 
-  def byteMap[K](blockSizeKb: Int = 8): MultiMap[K, Byte] =
-    new CompactMultiMap[K, Byte](multimap.CompactMultiMap.byteMap[K](blockSizeKb).asInstanceOf[multimap.MultiMap[K, Byte]])
+  def apply[K, J, S](
+    blockSizeKb: Int = DEFAULT_BLOCK,
+    mapFactory: MapFactory[K] = DEFAULT_MAP_FACTORY[K]
+  )(ctor: MultiMapBuilder[K] => multimap.MultiMap[K, J]): MultiMap[K, S] = {
+    val builder = new MultiMapBuilder[K]().blockSizeKb(blockSizeKb).mapFactory(mapFactory)
+    val map: multimap.MultiMap[K,S] = ctor(builder).asInstanceOf[multimap.MultiMap[K, S]]
+    new CompactMultiMap[K, S](map)
+  }
 
-  def shortMap[K](blockSizeKb: Int = 8): MultiMap[K, Short] =
-    new CompactMultiMap[K, Short](multimap.CompactMultiMap.shortMap[K](blockSizeKb).asInstanceOf[multimap.MultiMap[K, Short]])
+  def booleanMap[K](blockSizeKb: Int = DEFAULT_BLOCK): MultiMap[K, Boolean] =
+    apply(blockSizeKb)(_.booleanMap())
 
-  def intMap[K](blockSizeKb: Int = 8): CompactMultiMap[K, Int] =
-    new CompactMultiMap[K, Int](multimap.CompactMultiMap.intMap[K](blockSizeKb).asInstanceOf[multimap.MultiMap[K, Int]])
+  def byteMap[K](blockSizeKb: Int = DEFAULT_BLOCK): MultiMap[K, Byte] =
+    apply(blockSizeKb)(_.byteMap())
 
-  def longMap[K](blockSizeKb: Int = 8): CompactMultiMap[K, Long] =
-    new CompactMultiMap[K, Long](multimap.CompactMultiMap.longMap[K](blockSizeKb).asInstanceOf[multimap.MultiMap[K, Long]])
+  def shortMap[K](blockSizeKb: Int = DEFAULT_BLOCK): MultiMap[K, Short] =
+    apply(blockSizeKb)(_.shortMap())
 
-  def floatMap[K](blockSizeKb: Int = 8): CompactMultiMap[K, Float] =
-    new CompactMultiMap[K, Float](multimap.CompactMultiMap.floatMap[K](blockSizeKb).asInstanceOf[multimap.MultiMap[K, Float]])
+  def intMap[K](blockSizeKb: Int = DEFAULT_BLOCK): MultiMap[K, Int] =
+    apply(blockSizeKb)(_.intMap())
 
-  def doubleMap[K](blockSizeKb: Int = 8): CompactMultiMap[K, Double] =
-    new CompactMultiMap[K, Double](multimap.CompactMultiMap.doubleMap[K](blockSizeKb).asInstanceOf[multimap.MultiMap[K, Double]])
+  def longMap[K](blockSizeKb: Int = DEFAULT_BLOCK): MultiMap[K, Long] =
+    apply(blockSizeKb)(_.longMap())
 
-  def objectMap[K, V <: java.io.Serializable](blockSizeKb: Int = 8): CompactMultiMap[K, V] =
-    new CompactMultiMap[K, V](multimap.CompactMultiMap.objectMap[K, V](blockSizeKb))
+  def floatMap[K](blockSizeKb: Int = DEFAULT_BLOCK): MultiMap[K, Float] =
+    apply(blockSizeKb)(_.floatMap())
+
+  def doubleMap[K](blockSizeKb: Int = DEFAULT_BLOCK): MultiMap[K, Double] =
+    apply(blockSizeKb)(_.doubleMap())
+
+  def objectMap[K, V](blockSizeKb: Int = DEFAULT_BLOCK): MultiMap[K, V] =
+    apply(blockSizeKb)(_.objectMap())
 
 }
