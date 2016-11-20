@@ -5,17 +5,15 @@ Works well for collecting large amount of "append-only" data in-memory.
 
 ## Features
 
- * Low memory usage due to byte array representation in values.
+ * Low memory usage due to byte array value list representation.
  * Values are compressed automatically above a certain size.
  * Supports ordered list of values, duplicates are possible. 
  * Specialized implementation for primitive values.
+ * Support for custom inner map for efficient primitive key storage ([fastutil], [Koloboke]). 
  * Efficient put operations.
  * Single threaded.
  * Scala wrapper.
  
-## Planned features
- * Specialized implementation for primitive keys *(coming soon)*.
-
 ## Missing features
 
  * Persistence support.
@@ -69,14 +67,14 @@ You can get compact-multimap from [maven central].
 <dependency>
     <groupId>com.github.bezsias</groupId>
     <artifactId>compact-multimap_2.11</artifactId>
-    <version>0.9.0</version>
+    <version>0.10.0</version>
 </dependency>
 ```
 
 #### Sbt
 
 ```
-libraryDependencies += "com.github.bezsias" % "compact-multimap_2.11" % "0.9.0"
+libraryDependencies += "com.github.bezsias" % "compact-multimap_2.11" % "0.10.0"
 ```
 
 ## License
@@ -85,3 +83,5 @@ Distributed under [MIT license](http://choosealicense.com/licenses/mit/).
 
 [multimap]: https://en.wikipedia.org/wiki/Multimap
 [maven central]: http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22compact-multimap_2.11%22
+[Koloboke]: https://github.com/leventov/Koloboke
+[fastutil]: https://github.com/vigna/fastutil
