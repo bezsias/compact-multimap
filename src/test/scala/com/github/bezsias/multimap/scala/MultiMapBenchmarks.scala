@@ -1,5 +1,7 @@
 package com.github.bezsias.multimap.scala
 
+import com.github.bezsias.multimap
+import com.github.bezsias.multimap.MapInfo
 import org.scalatest.{FunSpecLike, Matchers}
 
 class MultiMapBenchmarks extends FunSpecLike with Matchers {
@@ -10,6 +12,11 @@ class MultiMapBenchmarks extends FunSpecLike with Matchers {
     keyCount: Int,
     valueCount: Int
   ) {
+
+    def memoryUsage: Int = MapInfo.memoryUsage(
+      map.asInstanceOf[CompactMultiMap[String, String]]
+      .map.asInstanceOf[multimap.CompactMultiMap[String, String]]
+    )
 
     def test: String = {
       val time = System.currentTimeMillis()
@@ -28,7 +35,7 @@ class MultiMapBenchmarks extends FunSpecLike with Matchers {
 
       val dataSize = keySize + valueSize
 
-      val mapSize = keySize + map.memoryUsage
+      val mapSize = keySize + memoryUsage
 
       val inflation = mapSize / dataSize.toDouble
 

@@ -5,8 +5,6 @@ trait MultiMap[K, V] {
   /** Returns the number of key-value pairs. */
   def size: Int
 
-  def memoryUsage: Int
-
   def isEmpty: Boolean
 
   def contains(key: K): Boolean

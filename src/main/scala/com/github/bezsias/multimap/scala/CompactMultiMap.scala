@@ -5,14 +5,10 @@ import java.util
 import com.github.bezsias._
 import com.github.bezsias.multimap.{MapFactory, MultiMapBuilder}
 
-import scala.collection.immutable.HashMap
-
 case class CompactMultiMap[K, V] private (map: multimap.MultiMap[K, V]) extends MultiMap[K, V] {
   import collection.JavaConverters._
 
   override def size: Int = map.size
-
-  override def memoryUsage: Int = map.memoryUsage()
 
   override def isEmpty: Boolean = map.isEmpty
 

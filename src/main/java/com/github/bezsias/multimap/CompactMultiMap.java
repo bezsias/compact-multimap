@@ -21,13 +21,6 @@ public class CompactMultiMap<K, V extends Serializable> implements MultiMap<K, V
         this.compressedMap = mapFactory.createMap();
     }
 
-    public int memoryUsage() {
-        int len = 0;
-        for (K key: keys()) {
-            len += fetch(key).size();
-        }
-        return len;
-    }
 
     @Override
     public int size() {
@@ -58,7 +51,7 @@ public class CompactMultiMap<K, V extends Serializable> implements MultiMap<K, V
         return ks;
     }
 
-    private BytePack fetch(K key) {
+    BytePack fetch(K key) {
         return new BytePack(noncompressedMap.get(key), compressedMap.get(key));
     }
 
