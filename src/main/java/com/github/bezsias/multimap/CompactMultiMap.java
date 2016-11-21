@@ -21,7 +21,6 @@ public class CompactMultiMap<K, V extends Serializable> implements MultiMap<K, V
         this.compressedMap = mapFactory.createMap();
     }
 
-
     @Override
     public int size() {
         return _size;
@@ -102,7 +101,7 @@ public class CompactMultiMap<K, V extends Serializable> implements MultiMap<K, V
 
     @Override
     public void remove(K key) {
-        _size -= get(key).size(); //FIXME: too expensive?
+        _size -= get(key).size();
         noncompressedMap.remove(key);
         compressedMap.remove(key);
     }
@@ -110,8 +109,10 @@ public class CompactMultiMap<K, V extends Serializable> implements MultiMap<K, V
     @Override
     public void remove(K key, V value) {
         List<V> values = get(key);
+        _size -= values.size();
+        noncompressedMap.remove(key);
+        compressedMap.remove(key);
         while (values.remove(value));
-        remove(key);
         putAll(key, values);
     }
 
