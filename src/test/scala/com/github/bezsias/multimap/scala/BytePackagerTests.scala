@@ -92,7 +92,7 @@ class BytePackagerTests extends FunSpecLike with Matchers {
   }
 
   describe("Object BytePackager Tests") {
-    new BytePackagerTester[String](BytePackager.objBytePackager(1), randomString(5))
+    new BytePackagerTester[String](BytePackager.objBytePackager(1), Random.nextString(5))
   }
 
 }

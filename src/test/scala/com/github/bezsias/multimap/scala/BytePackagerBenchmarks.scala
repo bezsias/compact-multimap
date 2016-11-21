@@ -66,6 +66,6 @@ class BytePackagerBenchmarks extends FunSpecLike with Matchers {
 
   desc("string", 1000, (blockSizeKb, n) => {
     val length = 100
-    new BytePackagerTester[String](BytePackager.objBytePackager(blockSizeKb), randomString(length), length, n, blockSizeKb)
+    new BytePackagerTester[String](BytePackager.objBytePackager(blockSizeKb), Random.nextString(length), length, n, blockSizeKb)
   })
 }

@@ -52,18 +52,6 @@ public class MultiMapBuilder<K> {
     public <V extends Serializable> MultiMap<K, V> objectMap() throws IOException {
         return new CompactMultiMap<>(BytePackager.objBytePackager(blockSizeKb), mapFactory);
     }
-
-    public static void main(String[] args) throws java.io.IOException {
-        MultiMap<String, String> map = new MultiMapBuilder<String>()
-                .blockSizeKb(8).mapFactory(HashMap::new).objectMap();
-        map.put("a", "1");
-        map.put("a", "2");
-        map.put("b", "1");
-        map.put("a", "3");
-
-        java.util.List<String> values = map.get("a");
-        System.out.println("map.size() = " + map.size());
-    }
 }
 
 

@@ -38,9 +38,9 @@ class BytePackagerImpl<T extends Serializable> extends AbstractBytePackager<T> {
 
     @Override
     public BytePack pack(BytePack pack, List<T> values) throws IOException {
+        if (values.isEmpty()) return pack;
         baos.reset();
         baos.write(pack.noncompressed);
-        if (values.isEmpty()) return pack;
         for (int i = 0, n = values.size(); i < n; i++) {
             writer.write(values.get(i), oos, dos);
         }

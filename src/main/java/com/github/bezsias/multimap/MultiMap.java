@@ -26,7 +26,7 @@ public interface MultiMap<K, V> {
 
     List<V> get(K key);
 
-    /** Removes all values associated with key. */
+    /** Removes all values associated with a key. */
     void remove(K key);
 
     /** Returns the count of removed elements */

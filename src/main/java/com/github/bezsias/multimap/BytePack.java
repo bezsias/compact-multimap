@@ -10,11 +10,6 @@ public class BytePack {
         this.compressed = null;
     }
 
-    BytePack(byte[] bytes) {
-        this.noncompressed = bytes;
-        this.compressed = null;
-    }
-
     BytePack(byte[] noncompressedBytes, byte[] compressedBytes) {
         if (noncompressedBytes == null)
             this.noncompressed = EMPTY_BYTE_ARRAY;

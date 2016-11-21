@@ -225,35 +225,35 @@ class CompactMultiMapTest extends FunSpecLike with Matchers {
   }
 
   describe("Boolean CompactMultiMap") {
-    new MultimapTester[String, Boolean](CompactMultiMap.booleanMap[String](), randomString(10), Random.nextBoolean())
+    new MultimapTester[String, Boolean](CompactMultiMap.booleanMap[String](), Random.nextString(10), Random.nextBoolean())
   }
 
   describe("Byte CompactMultiMap") {
-    new MultimapTester[String, Byte](CompactMultiMap.byteMap[String](), randomString(10), Random.nextInt(100).toByte)
+    new MultimapTester[String, Byte](CompactMultiMap.byteMap[String](), Random.nextString(10), Random.nextInt(100).toByte)
   }
 
   describe("Short CompactMultiMap") {
-    new MultimapTester[String, Short](CompactMultiMap.shortMap[String](), randomString(10), Random.nextInt(100).toShort)
+    new MultimapTester[String, Short](CompactMultiMap.shortMap[String](), Random.nextString(10), Random.nextInt(100).toShort)
   }
 
   describe("Int CompactMultiMap") {
-    new MultimapTester[String, Int](CompactMultiMap.intMap[String](), randomString(10), Random.nextInt(100))
+    new MultimapTester[String, Int](CompactMultiMap.intMap[String](), Random.nextString(10), Random.nextInt(100))
   }
 
   describe("Long CompactMultiMap") {
-    new MultimapTester[String, Long](CompactMultiMap.longMap[String](), randomString(10), Random.nextLong)
+    new MultimapTester[String, Long](CompactMultiMap.longMap[String](), Random.nextString(10), Random.nextLong)
   }
 
   describe("Float CompactMultiMap") {
-    new MultimapTester[String, Float](CompactMultiMap.floatMap[String](), randomString(10), Random.nextFloat)
+    new MultimapTester[String, Float](CompactMultiMap.floatMap[String](), Random.nextString(10), Random.nextFloat)
   }
 
   describe("Double CompactMultiMap") {
-    new MultimapTester[String, Double](CompactMultiMap.doubleMap[String](), randomString(10), Random.nextDouble())
+    new MultimapTester[String, Double](CompactMultiMap.doubleMap[String](), Random.nextString(10), Random.nextDouble())
   }
 
   describe("String CompactMultiMap") {
-    new MultimapTester[String, String](CompactMultiMap.objectMap[String, String](), randomString(10), randomString(10))
+    new MultimapTester[String, String](CompactMultiMap.objectMap[String, String](), Random.nextString(10), Random.nextString(10))
   }
 
 }

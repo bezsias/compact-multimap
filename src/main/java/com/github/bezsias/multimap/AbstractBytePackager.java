@@ -10,7 +10,7 @@ abstract class AbstractBytePackager<T extends Serializable> implements BytePacka
     private static byte[] LENGTH_BYTES = new byte[]{ Util.ZERO_BYTE, Util.ZERO_BYTE };
 
     private int blockSize;
-    ByteArrayOutputStream baos;
+    protected ByteArrayOutputStream baos;
 
     AbstractBytePackager(int blockSizeKb) throws IOException {
         this.blockSize = blockSizeKb * 1024;
