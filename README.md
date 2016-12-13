@@ -1,7 +1,17 @@
 # compact-multimap
 
-A [multimap] implementation which trades some CPU time in favour of compact memory representation.  
+A [multimap] implementation which trades some CPU time in favour of compact memory representation.   
 Works well for collecting large amount of "append-only" data in-memory. 
+
+## Details
+
+It basically represents a Map[K, List[V]] as a Map[K, Array[Byte]]. So when a new item is put into the map it gets serialized 
+and appended to a byte array. When a user defined byte size is reached (8 kB by default) the array gets zipped and stored separately. 
+This separate compation allows better memory footprint while keeping the original array at a constant size therefore the time of insertion 
+won't degrade by the number of elements in the list. This in-memory storage is optimized for minimal memory footprint and fast instertion.
+For retrieval operations like get, remove and contains it is necessary to unzip and deserialize the byte array in order to access 
+the actual objects so those operations are expected to be slower than standard multimap implementations.  
+So choose wisely according to your constraints/usage patterns.
 
 ## Features
 
