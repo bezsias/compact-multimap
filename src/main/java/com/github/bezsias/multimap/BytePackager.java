@@ -40,7 +40,7 @@ public interface BytePackager<T> {
     }
 
     static <T extends java.io.Serializable> BytePackager<T> objBytePackager(int blockSizeKb) throws IOException {
-        return new BytePackagerImpl<>(blockSizeKb, (ois, dis) -> (T) ois.readObject(), (value, oss, dos) -> oss.writeObject(value));
+        return new BytePackagerImpl<>(blockSizeKb, (ois, dis) -> (T) ois.readUnshared(), (value, oss, dos) -> oss.writeUnshared(value));
     }
 
 }
