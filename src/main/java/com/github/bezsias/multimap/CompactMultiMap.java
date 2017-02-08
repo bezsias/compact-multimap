@@ -95,6 +95,7 @@ public class CompactMultiMap<K, V extends Serializable> implements MultiMap<K, V
         try {
             return packager.unpack(pack);
         } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
             return Collections.emptyList();
         }
     }

@@ -256,4 +256,16 @@ class CompactMultiMapTest extends FunSpecLike with Matchers {
     new MultimapTester[String, String](CompactMultiMap.objectMap[String, String](), Random.nextString(10), Random.nextString(10))
   }
 
+  describe("extra tests") {
+
+    it("should work for duplicated items for different keys") {
+      val map = CompactMultiMap.objectMap[String, String]()
+      map.put("key", "value")
+      map.get("key") shouldBe List("value")
+      map.put("key2", "value2")
+      map.put("key2", "value2")
+      map.get("key2") shouldBe List("value2", "value2")
+    }
+  }
+
 }
