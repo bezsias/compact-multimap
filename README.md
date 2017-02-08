@@ -77,14 +77,14 @@ You can get compact-multimap from [maven central].
 <dependency>
     <groupId>com.github.bezsias</groupId>
     <artifactId>compact-multimap_2.11</artifactId>
-    <version>0.10.0</version>
+    <version>0.11.0</version>
 </dependency>
 ```
 
 #### Sbt
 
 ```
-libraryDependencies += "com.github.bezsias" % "compact-multimap_2.11" % "0.10.0"
+libraryDependencies += "com.github.bezsias" %% "compact-multimap" % "0.11.0"
 ```
 
 ## License
