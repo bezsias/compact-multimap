@@ -43,4 +43,20 @@ public interface BytePackager<T> {
         return new BytePackagerImpl<>(blockSizeKb, (ois, dis) -> (T) ois.readUnshared(), (value, oss, dos) -> oss.writeUnshared(value));
     }
 
+    static BytePackager<byte[]> byteArrayBytePackager(int blockSizeKb) throws IOException {
+        return new BytePackagerImpl<>(
+            blockSizeKb,
+            (ois, dis) -> {
+                int length = dis.readInt();
+                byte[] bytes = new byte[length];
+                dis.readFully(bytes);
+                return bytes;
+            },
+            (value, oss, dos) -> {
+                dos.writeInt(value.length);
+                dos.write(value);
+            }
+        );
+    }
+
 }

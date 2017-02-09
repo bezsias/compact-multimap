@@ -5,6 +5,7 @@ import org.scalatest._
 
 import scala.collection.JavaConverters._
 import scala.util.Random
+import TestUtil._
 
 class BytePackagerTests extends FunSpecLike with Matchers {
 
@@ -14,7 +15,7 @@ class BytePackagerTests extends FunSpecLike with Matchers {
       val bytes = new BytePack()
       val items = 1.to(n).map(_ => generator).toList
       val packed = items.foldLeft(bytes)( (bs, i) => packager.pack(bs, i))
-      packager.unpack(packed).asScala shouldBe items
+      packager.unpack(packed).asScala should contain theSameElementsInOrderAs items
     }
 
     def testPackBatch(n: Int, m: Int = 1): Unit = {
@@ -25,7 +26,7 @@ class BytePackagerTests extends FunSpecLike with Matchers {
       }.toList
 
       val packed = items.foldLeft(bytes)((bs, is) => packager.pack(bs, is.asJava))
-      packager.unpack(packed).asScala shouldBe items.flatten
+      packager.unpack(packed).asScala should contain theSameElementsInOrderAs items.flatten
     }
 
     it("should init byte[] as expected") {
@@ -93,6 +94,10 @@ class BytePackagerTests extends FunSpecLike with Matchers {
 
   describe("Object BytePackager Tests") {
     new BytePackagerTester[String](BytePackager.objBytePackager(1), Random.nextString(5))
+  }
+
+  describe("Byte Array BytePackager Tests") {
+    new BytePackagerTester[Array[Byte]](BytePackager.byteArrayBytePackager(1), randomByteArray(5))
   }
 
 }

@@ -3,6 +3,7 @@ package com.github.bezsias.multimap.scala
 import org.scalatest._
 
 import scala.util.Random
+import TestUtil._
 
 class CompactMultiMapTest extends FunSpecLike with Matchers {
 
@@ -51,7 +52,7 @@ class CompactMultiMapTest extends FunSpecLike with Matchers {
         map.keys shouldBe Set(key)
         map.contains(key) shouldBe true
         map.contains(key, value) shouldBe true
-        map.get(key) shouldBe List(value)
+        map.get(key) should contain theSameElementsInOrderAs List(value)
       }
 
       it("should put a single item multiple times") {
@@ -64,7 +65,7 @@ class CompactMultiMapTest extends FunSpecLike with Matchers {
         map.keys shouldBe Set(key)
         map.contains(key) shouldBe true
         map.contains(key, value) shouldBe true
-        map.get(key) shouldBe List(value, value, value)
+        map.get(key) should contain theSameElementsInOrderAs List(value, value, value)
       }
 
       it("should put multiple distinct keyed items") {
@@ -80,7 +81,9 @@ class CompactMultiMapTest extends FunSpecLike with Matchers {
         map.keys shouldBe keys.toSet
         keys.forall(map.contains) shouldBe true
         keyvalues.forall { case (k, v) => map.contains(k, v) } shouldBe true
-        keyvalues.forall { case (k, v) => map.get(k) == List(v) } shouldBe true
+        keyvalues.foreach {
+          case (k, v) => map.get(k) should contain theSameElementsInOrderAs List(v)
+        }
       }
 
       it("should put multiple items") {
@@ -103,7 +106,9 @@ class CompactMultiMapTest extends FunSpecLike with Matchers {
         keys.forall(map.contains) shouldBe true
 
         keyvalues.forall { case (k, vs) => vs.forall(map.contains(k, _)) } shouldBe true
-        keyvalues.forall { case (k, vs) => map.get(k) == vs.toList } shouldBe true
+        keyvalues.foreach {
+          case (k, vs) => map.get(k) should contain theSameElementsInOrderAs vs.toList
+        }
       }
     }
 
@@ -254,6 +259,10 @@ class CompactMultiMapTest extends FunSpecLike with Matchers {
 
   describe("String CompactMultiMap") {
     new MultimapTester[String, String](CompactMultiMap.objectMap[String, String](), Random.nextString(10), Random.nextString(10))
+  }
+
+  describe("Array[Byte] CompactMultiMap") {
+    new MultimapTester[String, Array[Byte]](CompactMultiMap.byteArrayMap[String](), Random.nextString(10), randomByteArray(10))
   }
 
   describe("extra tests") {

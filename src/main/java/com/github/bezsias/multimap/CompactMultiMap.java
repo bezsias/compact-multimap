@@ -21,6 +21,14 @@ public class CompactMultiMap<K, V extends Serializable> implements MultiMap<K, V
         this.compressedMap = mapFactory.createMap();
     }
 
+    protected boolean remove(List<V> values, V value) {
+        return values.remove(value);
+    }
+
+    protected boolean contains(List<V> values, V value) {
+        return values.contains(value);
+    }
+
     @Override
     public int size() {
         return _size;
@@ -39,7 +47,7 @@ public class CompactMultiMap<K, V extends Serializable> implements MultiMap<K, V
     @Override
     public boolean contains(K key, V value) {
         List<V> values = get(key);
-        return values.contains(value);
+        return contains(values, value);
     }
 
     @Override
@@ -75,7 +83,9 @@ public class CompactMultiMap<K, V extends Serializable> implements MultiMap<K, V
             pack = packager.pack(pack, value);
             store(key, pack);
             _size++;
-        } catch (IOException e) {}
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -86,7 +96,9 @@ public class CompactMultiMap<K, V extends Serializable> implements MultiMap<K, V
             pack = packager.pack(pack, values);
             store(key, pack);
             _size += values.size();
-        } catch (IOException e) {}
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -113,7 +125,7 @@ public class CompactMultiMap<K, V extends Serializable> implements MultiMap<K, V
         _size -= values.size();
         noncompressedMap.remove(key);
         compressedMap.remove(key);
-        while (values.remove(value));
+        while (remove(values, value));
         putAll(key, values);
     }
 

@@ -52,6 +52,10 @@ public class MultiMapBuilder<K> {
     public <V extends Serializable> MultiMap<K, V> objectMap() throws IOException {
         return new CompactMultiMap<>(BytePackager.objBytePackager(blockSizeKb), mapFactory);
     }
+
+    public MultiMap<K, byte[]> byteArrayMap() throws IOException {
+        return new CompactByteArrayMultiMap<>(BytePackager.byteArrayBytePackager(blockSizeKb), mapFactory);
+    }
 }
 
 

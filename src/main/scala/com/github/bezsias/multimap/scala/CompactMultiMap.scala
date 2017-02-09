@@ -71,4 +71,6 @@ object CompactMultiMap {
   def objectMap[K, V](blockSizeKb: Int = DEFAULT_BLOCK): MultiMap[K, V] =
     apply(blockSizeKb)(_.objectMap())
 
+  def byteArrayMap[K](blockSizeKb: Int = DEFAULT_BLOCK): MultiMap[K, Array[Byte]] =
+    apply(blockSizeKb)(_.byteArrayMap())
 }
