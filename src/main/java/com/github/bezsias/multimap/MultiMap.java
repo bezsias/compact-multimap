@@ -12,6 +12,12 @@ public interface MultiMap<K, V> {
     /** Returns the number of key-value pairs. */
     int size();
 
+    /** Lower limit on key size **/
+    int minKeySize();
+
+    /** Upper limit on key size **/
+    int maxKeySize();
+
     boolean isEmpty();
 
     boolean contains(K key);

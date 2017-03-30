@@ -5,6 +5,12 @@ trait MultiMap[K, V] {
   /** Returns the number of key-value pairs. */
   def size: Int
 
+  /** Lower limit on key size **/
+  def minKeySize: Int
+
+  /** Upper limit on key size **/
+  def maxKeySize: Int
+
   def isEmpty: Boolean
 
   def contains(key: K): Boolean

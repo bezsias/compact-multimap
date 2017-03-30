@@ -35,6 +35,16 @@ public class CompactMultiMap<K, V extends Serializable> implements MultiMap<K, V
     }
 
     @Override
+    public int minKeySize() {
+        return Math.max(compressedMap.size(), noncompressedMap.size());
+    }
+
+    @Override
+    public int maxKeySize() {
+        return compressedMap.size() + noncompressedMap.size();
+    }
+
+    @Override
     public boolean isEmpty() {
         return size() == 0;
     }

@@ -10,6 +10,10 @@ case class CompactMultiMap[K, V] private (map: multimap.MultiMap[K, V]) extends 
 
   override def size: Int = map.size
 
+  override def minKeySize = map.minKeySize()
+
+  override def maxKeySize = map.maxKeySize()
+
   override def isEmpty: Boolean = map.isEmpty
 
   override def contains(key: K): Boolean = map.contains(key)
@@ -29,6 +33,7 @@ case class CompactMultiMap[K, V] private (map: multimap.MultiMap[K, V]) extends 
   override def remove(key: K, value: V): Unit = map.remove(key, value)
 
   override def clear(): Unit = map.clear()
+
 }
 
 object CompactMultiMap {
