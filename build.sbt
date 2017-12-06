@@ -4,7 +4,9 @@ organization := "com.github.bezsias"
 
 name := "compact-multimap"
 
-scalaVersion := "2.11.8"
+scalaVersion in ThisBuild := "2.11.12"
+
+scalacOptions += "-target:jvm-1.8"
 
 libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.0" % "test"
 
